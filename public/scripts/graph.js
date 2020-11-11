@@ -1,3 +1,58 @@
+function getScrollingPosition() {
+  var position = [0, 0];
+  if (typeof window.pageYOffset != 'undefined') {
+    position = [
+      window.pageXOffset,
+      window.pageYOffset
+    ];
+  } else if (typeof document.documentElement.scrollTop
+  != 'undefined' && document.documentElement.scrollTop > 0) {
+    position = [
+      document.documentElement.scrollLeft,
+      document.documentElement.scrollTop
+    ];
+  } else if (typeof document.body.scrollTop != 'undefined') {
+    position = [
+      document.body.scrollLeft,
+      document.body.scrollTop
+    ];
+  }
+  return position;
+}
+
+function pDistance(x, y, x1, y1, x2, y2) {
+
+  var A = x - x1;
+  var B = y - y1;
+  var C = x2 - x1;
+  var D = y2 - y1;
+
+  var dot = A * C + B * D;
+  var len_sq = C * C + D * D;
+  var param = -1;
+  if (len_sq != 0) //in case of 0 length line
+      param = dot / len_sq;
+
+  var xx, yy;
+
+  if (param < 0) {
+    xx = x1;
+    yy = y1;
+  }
+  else if (param > 1) {
+    xx = x2;
+    yy = y2;
+  }
+  else {
+    xx = x1 + param * C;
+    yy = y1 + param * D;
+  }
+
+  var dx = x - xx;
+  var dy = y - yy;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 class Graph {
   radius = 40;
   selected = null;
@@ -137,9 +192,18 @@ class Graph {
     }
   }
 
+  remove(component) {
+    if (component instanceof Node) {
+      this.removeNode(component);
+    } else if (component instanceof Edge) {
+      this.removeEdge(component);
+    }
+  }
+
+
   getNearestComponent(x, y) {
     var min = Number.MAX_SAFE_INTEGER;
-    var currentNode = null;
+    var current = null;
     for (let node of this.nodes) {
         var nodeX = node.x;
         var nodeY = node.y;
@@ -147,12 +211,32 @@ class Graph {
         var distance = Math.sqrt((x - nodeX)**2 + (y - nodeY)**2);
         if (distance < min) {
           min = distance;
-          currentNode = node;
+          current = node;
         }
     }
 
     if (min < 50) {
-      return currentNode;
+      return current;
+    }
+
+    for (let edge of this.edges) {
+      var node0 = edge.node0;
+      var node1 = edge.node1;
+
+      var x0 = node0.x;
+      var y0 = node0.y;
+      var x1 = node1.x;
+      var y1 = node1.y;
+
+      var distance = pDistance(x, y, x0, y0, x1, y1);
+      if (distance < min) {
+        min = distance;
+        current = edge;
+      }
+    }
+
+    if (min < 20) {
+      return current;
     } else {
       return null;
     }
@@ -161,6 +245,11 @@ class Graph {
   handleClick(click) {
     let x = event.clientX;
     let y = event.clientY;
+    let scrollPos = getScrollingPosition();
+
+    x += scrollPos[0];
+    y += scrollPos[1];
+
     var closest = this.getNearestComponent(x, y);
 
     if (this.selected === null && closest === null) {
@@ -169,9 +258,12 @@ class Graph {
       this.select(closest);
     } else if (closest === null) {
       this.deselectSelected();
-    } else {
+    } else if (this.selected instanceof Node && closest instanceof Node) {
       this.addEdge(new Edge(this.selected, closest));
       this.deselectSelected();
+    } else {
+      this.deselectSelected();
+      this.select(closest);
     }
   }
 
@@ -190,12 +282,24 @@ class Graph {
     this.redraw();
   }
 
-  changeLabel(node, label) {
-    if (node === null) {
-      return;
+  changeLabel(component, label) {
+    if (component instanceof Node) {
+      this.changeNodeLabel(component, label);
+    } else if (component instanceof Edge) {
+      let weight = parseInt(label);
+      if (!isNaN(weight)) {
+        this.changeEdgeWeight(component, weight);
+      }
     }
+  }
 
+  changeNodeLabel(node, label) {
     node.setLabel(label);
+    this.redraw();
+  }
+
+  changeEdgeWeight(edge, weight) {
+    edge.setWeight(weight);
     this.redraw();
   }
 

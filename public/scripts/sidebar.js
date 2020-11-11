@@ -55,7 +55,7 @@ class DeleteButton extends React.Component {
   }
 
   handleSubmit(event) {
-    graph.removeNode(graph.selected);
+    graph.remove(graph.selected);
   }
 
   render() {
