@@ -1,1 +1,2 @@
-# eecsfordummies.github.io
+# eecs_for_dummies
+EECS FOR DUMMIES!
