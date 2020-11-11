@@ -34,10 +34,15 @@ class InputForm extends React.Component {
       return null;
     }
 
+    let label = "Enter node value:";
+    if (graph.selected instanceof Edge)  {
+      label = "Enter edge weight (integer):";
+    }
+
     return (
       <form onSubmit={this.handleSubmit} >
         <label>
-          Name:
+          {label}
           <input type="text" value={this.state.value} onChange={this.handleChange} style={{width: "50px" }} />
         </label>
         <input type="button" value="Submit" onClick={this.handleSubmit}/>
