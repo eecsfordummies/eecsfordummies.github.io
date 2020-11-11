@@ -4,7 +4,7 @@
     REACT STUFF
 ==================*/
 
-class NameForm extends React.Component {
+class InputForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: ''};
@@ -71,8 +71,8 @@ class DeleteButton extends React.Component {
 
 
 function tick() {
-  let domContainer = document.querySelector('#like_button_container');
-  ReactDOM.render(<NameForm />, domContainer);
+  let domContainer = document.querySelector('#input_container');
+  ReactDOM.render(<InputForm />, domContainer);
   domContainer = document.querySelector('#delete_button_container');
   ReactDOM.render(<DeleteButton />, domContainer);
 }
