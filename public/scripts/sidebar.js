@@ -7,10 +7,25 @@
 class InputForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {value: '', visible: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+  }
+
+  tick() {
+    if (graph.selected === null && this.state.visible) {
+      this.setState({value: "", visible: false});
+    } else if (graph.selected !== null && !this.state.visible) {
+      this.setState({visible: true});
+    }
   }
 
   handleChange(event) {
@@ -22,22 +37,20 @@ class InputForm extends React.Component {
     event.preventDefault();
   }
 
-  clear() {
-    this.setState({value: ""});
-  }
-
   render() {
-    if (graph.selected === null) {
-      if (this.state.value != "") {
-        this.clear();
-      }
+    if (!this.state.visible) {
       return null;
+    }
+
+    let label = "Enter node value:";
+    if (graph.selected instanceof Edge)  {
+      label = "Enter edge weight (integer):";
     }
 
     return (
       <form onSubmit={this.handleSubmit} >
         <label>
-          Name:
+          {label}
           <input type="text" value={this.state.value} onChange={this.handleChange} style={{width: "50px" }} />
         </label>
         <input type="button" value="Submit" onClick={this.handleSubmit}/>
@@ -50,16 +63,31 @@ class InputForm extends React.Component {
 class DeleteButton extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {visible: false};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+  }
+
+  tick() {
+    if (graph.selected === null && this.state.visible) {
+      this.setState({visible: false});
+    } else if (graph.selected !== null && !this.state.visible) {
+      this.setState({visible: true});
+    }
+  }
+
   handleSubmit(event) {
-    graph.removeNode(graph.selected);
+    graph.remove(graph.selected);
   }
 
   render() {
-    if (graph.selected === null) {
+    if (!this.state.visible) {
       return null;
     }
 
@@ -69,11 +97,7 @@ class DeleteButton extends React.Component {
   }
 }
 
-
-function tick() {
-  let domContainer = document.querySelector('#input_container');
-  ReactDOM.render(<InputForm />, domContainer);
-  domContainer = document.querySelector('#delete_button_container');
-  ReactDOM.render(<DeleteButton />, domContainer);
-}
-setInterval(tick, 100);
+let domContainer = document.querySelector('#input_container');
+ReactDOM.render(<InputForm />, domContainer);
+domContainer = document.querySelector('#delete_button_container');
+ReactDOM.render(<DeleteButton />, domContainer);
