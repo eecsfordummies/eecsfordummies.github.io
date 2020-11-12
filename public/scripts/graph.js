@@ -160,7 +160,6 @@ class Graph {
     }
     this.nodes.delete(node);
     this.redraw();
-    this.deselectSelected();
   }
 
   addEdge(edge) {
@@ -195,8 +194,10 @@ class Graph {
   remove(component) {
     if (component instanceof Node) {
       this.removeNode(component);
+      this.deselectSelected();
     } else if (component instanceof Edge) {
       this.removeEdge(component);
+      this.deselectSelected();
     }
   }
 
@@ -359,14 +360,9 @@ var ctx = c.getContext("2d");
 
 var graph = new Graph(ctx, c);
 
-document.addEventListener("click", onClick);
-
-var selectedNode = null;
-
+c.addEventListener("click", onClick);
 function onClick(event) {
-  if (event.x <= c.width && event.x >= 0 && event.y <= c.height && event.y >= 0){
-    graph.handleClick(event);
-  }
+  graph.handleClick(event);
   /*
   let x = event.clientX;
   let y = event.clientY;
