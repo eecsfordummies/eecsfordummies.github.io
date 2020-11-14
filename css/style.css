@@ -226,6 +226,7 @@
 			.image.featured img {
 				display: block;
 				width: 100%;
+				max-height: 500px;
 			}
 
 /* Icon */
@@ -484,7 +485,7 @@
 	.wrapper.style1 {
 		padding-top: 10em;
 		padding-bottom: 2em;
-		background: url(../images/bg.jpg) no-repeat center top;
+		background: url(../images/back.jpg) no-repeat center top;
 		background-size: cover;
 		background-attachment: fixed;
 		-webkit-backface-visibility: hidden;
