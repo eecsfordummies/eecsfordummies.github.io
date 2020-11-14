@@ -133,6 +133,58 @@ var DeleteButton = function (_React$Component2) {
   return DeleteButton;
 }(React.Component);
 
+var AlgorithmButton = function (_React$Component3) {
+  _inherits(AlgorithmButton, _React$Component3);
+
+  function AlgorithmButton(props) {
+    _classCallCheck(this, AlgorithmButton);
+
+    var _this5 = _possibleConstructorReturn(this, (AlgorithmButton.__proto__ || Object.getPrototypeOf(AlgorithmButton)).call(this, props));
+
+    _this5.state = { visible: true, algorithm: props.algorithm, label: _this5.props.label };
+    _this5.handleSubmit = _this5.handleSubmit.bind(_this5);
+    return _this5;
+  }
+
+  _createClass(AlgorithmButton, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      /*
+      this.timerID = setInterval(
+        () => this.tick(),
+        100
+      );
+      */
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      /*
+      if (this.state.graph.selected === null && this.state.visible) {
+        this.setState({visible: false});
+      } else if (this.state.graph.selected !== null && !this.state.visible) {
+        this.setState({visible: true});
+      } */
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      this.state.algorithm();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this.state.visible) {
+        return null;
+      }
+
+      return React.createElement("input", { type: "button", value: this.state.label, onClick: this.handleSubmit });
+    }
+  }]);
+
+  return AlgorithmButton;
+}(React.Component);
+
 function createGraphInput(graph, componentID) {
   var domContainer = document.querySelector(componentID);
 
@@ -143,4 +195,10 @@ function createDeleteButton(graph, componentID) {
   var domContainer = document.querySelector(componentID);
 
   ReactDOM.render(React.createElement(DeleteButton, { graph: graph }), domContainer);
+}
+
+function createAlgorithmButton(algorithm, label, componentID) {
+  var domContainer = document.querySelector(componentID);
+
+  ReactDOM.render(React.createElement(AlgorithmButton, { algorithm: algorithm, label: label }), domContainer);
 }

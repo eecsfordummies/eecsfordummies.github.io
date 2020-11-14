@@ -274,6 +274,9 @@ class Graph {
   }
 
   deselectSelected() {
+    if (this.selected === null) {
+      return;
+    }
     this.changeColor(this.selected, "#000000");
     this.selected = null;
   }

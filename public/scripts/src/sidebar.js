@@ -97,6 +97,46 @@ class DeleteButton extends React.Component {
   }
 }
 
+class AlgorithmButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {visible: true, algorithm: props.algorithm, label: this.props.label};
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    /*
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+    */
+  }
+
+  tick() {
+    /*
+    if (this.state.graph.selected === null && this.state.visible) {
+      this.setState({visible: false});
+    } else if (this.state.graph.selected !== null && !this.state.visible) {
+      this.setState({visible: true});
+    } */
+  }
+
+  handleSubmit(event) {
+    this.state.algorithm();
+  }
+
+  render() {
+    if (!this.state.visible) {
+      return null;
+    }
+
+    return (
+      <input type="button" value={this.state.label} onClick={this.handleSubmit}/>
+    );
+  }
+}
+
 function createGraphInput(graph, componentID) {
   let domContainer = document.querySelector(componentID);
 
@@ -107,4 +147,10 @@ function createDeleteButton(graph, componentID) {
   let domContainer = document.querySelector(componentID);
 
   ReactDOM.render(<DeleteButton graph={graph}/>, domContainer);
+}
+
+function createAlgorithmButton(algorithm, label, componentID) {
+  let domContainer = document.querySelector(componentID);
+
+  ReactDOM.render(<AlgorithmButton algorithm={algorithm} label={label}/>, domContainer);
 }
