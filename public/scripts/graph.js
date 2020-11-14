@@ -355,12 +355,17 @@ class Edge {
        CANVAS
 ==================*/
 
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
+function createGraph(canvas) {
+  var c = canvas
+  var ctx = c.getContext("2d");
 
-var graph = new Graph(ctx, c);
+  var graph = new Graph(ctx, c);
 
-c.addEventListener("click", onClick);
+  c.addEventListener("click", onClick);
+
+  return graph;
+}
+
 function onClick(event) {
   graph.handleClick(event);
   /*

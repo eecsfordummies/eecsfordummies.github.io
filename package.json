@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/eecsfordummies/eecsfordummies.github.io#readme",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "express": "^4.17.1"
   }
 }
