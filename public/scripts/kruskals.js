@@ -52,7 +52,8 @@ class Kruskals extends Algorithm {
 
   start() {
     this.reset();
-    this.setObjectState('kruskals');
+    this.setObjectAlgorithm();
+    this.setObjectState('algorithm');
   }
 
   reset() {

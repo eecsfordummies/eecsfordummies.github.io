@@ -137,7 +137,7 @@ class AlgorithmButton extends React.Component {
 class AlgorithmSidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {visible: false, algorithm: props.algorithm, desiredState: this.props.desiredState};
+    this.state = {visible: false, object: props.object, algorithm: null};
     this.handleRun = this.handleRun.bind(this);
     this.handleStep = this.handleStep.bind(this);
     this.handleExit = this.handleExit.bind(this);
@@ -151,10 +151,10 @@ class AlgorithmSidebar extends React.Component {
   }
 
   tick() {
-    if (this.state.algorithm.getObjectState() !== this.state.desiredState && this.state.visible) {
+    if (this.state.object.state !== 'algorithm' && this.state.visible) {
       this.setState({visible: false});
-    } else if (this.state.algorithm.getObjectState() === this.state.desiredState && !this.state.visible) {
-      this.setState({visible: true});
+    } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
+      this.setState({visible: true, algorithm: this.state.object.algorithm});
     }
   }
 
@@ -203,8 +203,8 @@ function createAlgorithmButton(algorithm, label, componentID) {
   ReactDOM.render(<AlgorithmButton algorithm={algorithm} label={label}/>, domContainer);
 }
 
-function createAlgorithmSidebar(algorithm, desiredState, componentID) {
+function createAlgorithmSidebar(object, componentID) {
   let domContainer = document.querySelector(componentID);
 
-  ReactDOM.render(<AlgorithmSidebar algorithm={algorithm} desiredState={desiredState}/>, domContainer);
+  ReactDOM.render(<AlgorithmSidebar object={object}/>, domContainer);
 }

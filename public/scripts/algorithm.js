@@ -2,16 +2,25 @@ class Algorithm {
   object = null;
   algorithm = null;
 
-  start() {}
+  start() {
+    this.setObjectAlgorithm();
+    this.setObjectState('algorithm');
+  }
 
   run() {
-    this.algorithm.return();
+    let continueIteration = true;
+    while (continueIteration) {
+      let result = this.step();
+      continueIteration = !result.done;
+    }
   }
 
   step() {
     this.algorithm.next();
   }
+
   reset() {}
+
   exit() {
     this.reset();
     this.setObjectState('write');
@@ -23,6 +32,10 @@ class Algorithm {
 
   setObjectState(state) {
     this.object.setState(state);
+  }
+
+  setObjectAlgorithm() {
+    this.object.setAlgorithm(this);
   }
 
   constructor() {}

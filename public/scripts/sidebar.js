@@ -191,7 +191,7 @@ var AlgorithmSidebar = function (_React$Component4) {
 
     var _this7 = _possibleConstructorReturn(this, (AlgorithmSidebar.__proto__ || Object.getPrototypeOf(AlgorithmSidebar)).call(this, props));
 
-    _this7.state = { visible: false, algorithm: props.algorithm, desiredState: _this7.props.desiredState };
+    _this7.state = { visible: false, object: props.object, algorithm: null };
     _this7.handleRun = _this7.handleRun.bind(_this7);
     _this7.handleStep = _this7.handleStep.bind(_this7);
     _this7.handleExit = _this7.handleExit.bind(_this7);
@@ -210,10 +210,10 @@ var AlgorithmSidebar = function (_React$Component4) {
   }, {
     key: "tick",
     value: function tick() {
-      if (this.state.algorithm.getObjectState() !== this.state.desiredState && this.state.visible) {
+      if (this.state.object.state !== 'algorithm' && this.state.visible) {
         this.setState({ visible: false });
-      } else if (this.state.algorithm.getObjectState() === this.state.desiredState && !this.state.visible) {
-        this.setState({ visible: true });
+      } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
+        this.setState({ visible: true, algorithm: this.state.object.algorithm });
       }
     }
   }, {
@@ -269,8 +269,8 @@ function createAlgorithmButton(algorithm, label, componentID) {
   ReactDOM.render(React.createElement(AlgorithmButton, { algorithm: algorithm, label: label }), domContainer);
 }
 
-function createAlgorithmSidebar(algorithm, desiredState, componentID) {
+function createAlgorithmSidebar(object, componentID) {
   var domContainer = document.querySelector(componentID);
 
-  ReactDOM.render(React.createElement(AlgorithmSidebar, { algorithm: algorithm, desiredState: desiredState }), domContainer);
+  ReactDOM.render(React.createElement(AlgorithmSidebar, { object: object }), domContainer);
 }
