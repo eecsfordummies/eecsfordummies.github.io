@@ -1,19 +1,23 @@
-function kruskals(graph) {
-  graph.deselectSelected();
+class Kruskals extends Algorithm {
+  edges = new Array();
+  union = new Map();
+  graph = null;
 
-  function findHead(a) {
-    while (union.get(a) !== a) {
-      a = union.get(a);
+  constructor(graph) {
+    super();
+    this.object = graph;
+    this.graph = graph;
+    this.algorithm = this.kruskals();
+  }
+
+  findHead(a) {
+    while (this.union.get(a) !== a) {
+      a = this.union.get(a);
     }
     return a;
   }
 
-  let union = new Map();
-  for (let node of graph.nodes) {
-    union.set(node, node);
-  }
-
-  function compare(a, b) {
+  compare(a, b) {
     if (a.weight > b.weight) {
       return 1;
     } else if (b.weight > a.weight) {
@@ -23,23 +27,58 @@ function kruskals(graph) {
     }
   }
 
-  let edges = Array.from(graph.edges);
-  edges.sort(compare);
-  while(edges.length > 0) {
-    let edge = edges.shift(); // edges.pop(0)
-    let n0 = findHead(edge.node0);
-    let n1 = findHead(edge.node1);
+  * kruskals() {
+    this.graph.deselectSelected();
 
-    if (n0 !== n1) {
-      union.set(n0, n1);
-      graph.changeColor(edge, "red");
+    this.union = new Map();
+    for (let node of this.graph.nodes) {
+      this.union.set(node, node);
+    }
+
+    this.edges = Array.from(this.graph.edges);
+    this.edges.sort(this.compare);
+    while(this.edges.length > 0) {
+      let edge = this.edges.shift(); // edges.pop(0)
+      let n0 = this.findHead(edge.node0);
+      let n1 = this.findHead(edge.node1);
+
+      if (n0 !== n1) {
+        this.union.set(n0, n1);
+        this.graph.changeColor(edge, "red");
+        yield 0;
+      }
     }
   }
 
+  start() {
+    this.reset();
+    this.setObjectState('kruskals');
+  }
+
+  reset() {
+    this.graph.deselectSelected();
+    for (let edge of this.graph.edges) {
+      this.graph.changeColor(edge, "black");
+    }
+    this.edges = new Set();
+    this.union = new Map();
+    this.algorithm = this.kruskals();
+  }
+
+  run() {
+    let continueIteration = true;
+    while (continueIteration) {
+      let result = this.step();
+      // console.dir(this.edges);
+      continueIteration = !result.done;
+    }
+  }
+
+  step() {
+    return this.algorithm.next();
+  }
 }
 
 function createKruskals(graph) {
-  return function() {
-    kruskals(graph);
-  }
+  return new Kruskals(graph);
 }

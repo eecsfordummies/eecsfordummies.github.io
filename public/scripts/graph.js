@@ -53,11 +53,12 @@ function pDistance(x, y, x1, y1, x2, y2) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-class Graph {
+class Graph extends AlgorithmObject {
   radius = 40;
   selected = null;
 
   constructor(ctx, canvas) {
+    super();
     this.nodes = new Set();
     this.edges = new Set();
     this.ctx = ctx;
@@ -244,6 +245,10 @@ class Graph {
   }
 
   handleClick(click) {
+    if (this.state !== 'write') {
+      return;
+    }
+
     let x = event.clientX;
     let y = event.clientY;
     let scrollPos = getScrollingPosition();

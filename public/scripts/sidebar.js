@@ -149,27 +149,25 @@ var AlgorithmButton = function (_React$Component3) {
   _createClass(AlgorithmButton, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      /*
-      this.timerID = setInterval(
-        () => this.tick(),
-        100
-      );
-      */
+      var _this6 = this;
+
+      this.timerID = setInterval(function () {
+        return _this6.tick();
+      }, 100);
     }
   }, {
     key: "tick",
     value: function tick() {
-      /*
-      if (this.state.graph.selected === null && this.state.visible) {
-        this.setState({visible: false});
-      } else if (this.state.graph.selected !== null && !this.state.visible) {
-        this.setState({visible: true});
-      } */
+      if (this.state.algorithm.getObjectState() !== 'write' && this.state.visible) {
+        this.setState({ visible: false });
+      } else if (this.state.algorithm.getObjectState() === 'write' && !this.state.visible) {
+        this.setState({ visible: true });
+      }
     }
   }, {
     key: "handleSubmit",
     value: function handleSubmit(event) {
-      this.state.algorithm();
+      this.state.algorithm.start();
     }
   }, {
     key: "render",
@@ -183,6 +181,74 @@ var AlgorithmButton = function (_React$Component3) {
   }]);
 
   return AlgorithmButton;
+}(React.Component);
+
+var AlgorithmSidebar = function (_React$Component4) {
+  _inherits(AlgorithmSidebar, _React$Component4);
+
+  function AlgorithmSidebar(props) {
+    _classCallCheck(this, AlgorithmSidebar);
+
+    var _this7 = _possibleConstructorReturn(this, (AlgorithmSidebar.__proto__ || Object.getPrototypeOf(AlgorithmSidebar)).call(this, props));
+
+    _this7.state = { visible: false, algorithm: props.algorithm, desiredState: _this7.props.desiredState };
+    _this7.handleRun = _this7.handleRun.bind(_this7);
+    _this7.handleStep = _this7.handleStep.bind(_this7);
+    _this7.handleExit = _this7.handleExit.bind(_this7);
+    return _this7;
+  }
+
+  _createClass(AlgorithmSidebar, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this8 = this;
+
+      this.timerID = setInterval(function () {
+        return _this8.tick();
+      }, 100);
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      if (this.state.algorithm.getObjectState() !== this.state.desiredState && this.state.visible) {
+        this.setState({ visible: false });
+      } else if (this.state.algorithm.getObjectState() === this.state.desiredState && !this.state.visible) {
+        this.setState({ visible: true });
+      }
+    }
+  }, {
+    key: "handleRun",
+    value: function handleRun(event) {
+      this.state.algorithm.run();
+    }
+  }, {
+    key: "handleStep",
+    value: function handleStep(event) {
+      this.state.algorithm.step();
+    }
+  }, {
+    key: "handleExit",
+    value: function handleExit(event) {
+      this.state.algorithm.exit();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this.state.visible) {
+        return null;
+      }
+
+      return React.createElement(
+        "div",
+        null,
+        React.createElement("input", { type: "button", value: "Run", onClick: this.handleRun }),
+        React.createElement("input", { type: "button", value: "Step", onClick: this.handleStep }),
+        React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit })
+      );
+    }
+  }]);
+
+  return AlgorithmSidebar;
 }(React.Component);
 
 function createGraphInput(graph, componentID) {
@@ -201,4 +267,10 @@ function createAlgorithmButton(algorithm, label, componentID) {
   var domContainer = document.querySelector(componentID);
 
   ReactDOM.render(React.createElement(AlgorithmButton, { algorithm: algorithm, label: label }), domContainer);
+}
+
+function createAlgorithmSidebar(algorithm, desiredState, componentID) {
+  var domContainer = document.querySelector(componentID);
+
+  ReactDOM.render(React.createElement(AlgorithmSidebar, { algorithm: algorithm, desiredState: desiredState }), domContainer);
 }

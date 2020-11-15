@@ -105,25 +105,22 @@ class AlgorithmButton extends React.Component {
   }
 
   componentDidMount() {
-    /*
     this.timerID = setInterval(
       () => this.tick(),
       100
     );
-    */
   }
 
   tick() {
-    /*
-    if (this.state.graph.selected === null && this.state.visible) {
+    if (this.state.algorithm.getObjectState() !== 'write' && this.state.visible) {
       this.setState({visible: false});
-    } else if (this.state.graph.selected !== null && !this.state.visible) {
+    } else if (this.state.algorithm.getObjectState() === 'write' && !this.state.visible) {
       this.setState({visible: true});
-    } */
+    }
   }
 
   handleSubmit(event) {
-    this.state.algorithm();
+    this.state.algorithm.start();
   }
 
   render() {
@@ -133,6 +130,57 @@ class AlgorithmButton extends React.Component {
 
     return (
       <input type="button" value={this.state.label} onClick={this.handleSubmit}/>
+    );
+  }
+}
+
+class AlgorithmSidebar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {visible: false, algorithm: props.algorithm, desiredState: this.props.desiredState};
+    this.handleRun = this.handleRun.bind(this);
+    this.handleStep = this.handleStep.bind(this);
+    this.handleExit = this.handleExit.bind(this);
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+  }
+
+  tick() {
+    if (this.state.algorithm.getObjectState() !== this.state.desiredState && this.state.visible) {
+      this.setState({visible: false});
+    } else if (this.state.algorithm.getObjectState() === this.state.desiredState && !this.state.visible) {
+      this.setState({visible: true});
+    }
+  }
+
+  handleRun(event) {
+    this.state.algorithm.run();
+  }
+
+  handleStep(event) {
+    this.state.algorithm.step();
+  }
+
+  handleExit(event) {
+    this.state.algorithm.exit();
+  }
+
+  render() {
+    if (!this.state.visible) {
+      return null;
+    }
+
+    return (
+      <div>
+        <input type="button" value='Run' onClick={this.handleRun}/>
+        <input type="button" value='Step' onClick={this.handleStep}/>
+        <input type="button" value='Exit' onClick={this.handleExit}/>
+      </div>
     );
   }
 }
@@ -153,4 +201,10 @@ function createAlgorithmButton(algorithm, label, componentID) {
   let domContainer = document.querySelector(componentID);
 
   ReactDOM.render(<AlgorithmButton algorithm={algorithm} label={label}/>, domContainer);
+}
+
+function createAlgorithmSidebar(algorithm, desiredState, componentID) {
+  let domContainer = document.querySelector(componentID);
+
+  ReactDOM.render(<AlgorithmSidebar algorithm={algorithm} desiredState={desiredState}/>, domContainer);
 }
