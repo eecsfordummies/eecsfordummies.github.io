@@ -193,6 +193,7 @@ var AlgorithmSidebar = function (_React$Component4) {
 
     _this7.state = { visible: false, object: props.object, algorithm: null };
     _this7.handleRun = _this7.handleRun.bind(_this7);
+    _this7.handleIterate = _this7.handleIterate.bind(_this7);
     _this7.handleStep = _this7.handleStep.bind(_this7);
     _this7.handleExit = _this7.handleExit.bind(_this7);
     return _this7;
@@ -220,11 +221,19 @@ var AlgorithmSidebar = function (_React$Component4) {
     key: "handleRun",
     value: function handleRun(event) {
       this.state.algorithm.run();
+      this.forceUpdate();
+    }
+  }, {
+    key: "handleIterate",
+    value: function handleIterate(event) {
+      this.state.algorithm.iterate();
+      this.forceUpdate();
     }
   }, {
     key: "handleStep",
     value: function handleStep(event) {
       this.state.algorithm.step();
+      this.forceUpdate();
     }
   }, {
     key: "handleExit",
@@ -238,12 +247,25 @@ var AlgorithmSidebar = function (_React$Component4) {
         return null;
       }
 
+      var str = this.state.algorithm.displayCode();
+      // let str = 'print(1)';
+      var html = Prism.highlight(str, Prism.languages.python, 'python');
+      var line = this.state.algorithm.highlightedLine;
+      console.log(line);
+      setTimeout(Prism.highlightAll);
+
       return React.createElement(
         "div",
         null,
         React.createElement("input", { type: "button", value: "Run", onClick: this.handleRun }),
+        React.createElement("input", { type: "button", value: "Iterate", onClick: this.handleIterate }),
         React.createElement("input", { type: "button", value: "Step", onClick: this.handleStep }),
-        React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit })
+        React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit }),
+        React.createElement(
+          "pre",
+          { className: "language-python line-numbers", "data-line": line },
+          React.createElement("code", { className: "language-python", dangerouslySetInnerHTML: { __html: html } })
+        )
       );
     }
   }]);
@@ -251,26 +273,93 @@ var AlgorithmSidebar = function (_React$Component4) {
   return AlgorithmSidebar;
 }(React.Component);
 
+var CodeBlock = function (_React$Component5) {
+  _inherits(CodeBlock, _React$Component5);
+
+  function CodeBlock(props) {
+    _classCallCheck(this, CodeBlock);
+
+    var _this9 = _possibleConstructorReturn(this, (CodeBlock.__proto__ || Object.getPrototypeOf(CodeBlock)).call(this, props));
+
+    _this9.state = { visible: false, object: props.object, algorithm: null };
+    // this.displayCode = this.displayCode.bind(this);
+    return _this9;
+  }
+
+  _createClass(CodeBlock, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this10 = this;
+
+      this.timerID = setInterval(function () {
+        return _this10.tick();
+      }, 100);
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      if (this.state.object.state !== 'algorithm' && this.state.visible) {
+        this.setState({ visible: false });
+      } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
+        this.setState({ visible: true, algorithm: this.state.object.algorithm });
+      }
+    }
+
+    /*
+    handleRun(event) {
+      this.state.algorithm.run();
+    }
+     handleStep(event) {
+      this.state.algorithm.step();
+    }
+     handleExit(event) {
+      this.state.algorithm.exit();
+    } */
+
+  }, {
+    key: "render",
+    value: function render() {
+
+      if (!this.state.visible) {
+        return null;
+      }
+
+      var str = this.state.algorithm.displayCode();
+      // let str = 'print(1)';
+      var html = Prism.highlight(str, Prism.languages.python, 'python');
+      setTimeout(Prism.highlightAll);
+      return React.createElement(
+        "pre",
+        { className: "language-python line-numbers" },
+        React.createElement("code", { className: "language-python", dangerouslySetInnerHTML: { __html: html } })
+      );
+    }
+  }]);
+
+  return CodeBlock;
+}(React.Component);
+
 function createGraphInput(graph, componentID) {
   var domContainer = document.querySelector(componentID);
-
   ReactDOM.render(React.createElement(InputForm, { graph: graph }), domContainer);
 }
 
 function createDeleteButton(graph, componentID) {
   var domContainer = document.querySelector(componentID);
-
   ReactDOM.render(React.createElement(DeleteButton, { graph: graph }), domContainer);
 }
 
 function createAlgorithmButton(algorithm, label, componentID) {
   var domContainer = document.querySelector(componentID);
-
   ReactDOM.render(React.createElement(AlgorithmButton, { algorithm: algorithm, label: label }), domContainer);
 }
 
 function createAlgorithmSidebar(object, componentID) {
   var domContainer = document.querySelector(componentID);
-
   ReactDOM.render(React.createElement(AlgorithmSidebar, { object: object }), domContainer);
+}
+
+function createCodeBlock(object, componentID) {
+  var domContainer = document.querySelector(componentID);
+  ReactDOM.render(React.createElement(CodeBlock, { object: object }), domContainer);
 }

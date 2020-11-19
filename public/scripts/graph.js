@@ -119,30 +119,6 @@ class Graph extends AlgorithmObject {
     this.ctx.textBaseline = 'middle';
     this.ctx.fillText(edge.weight, midx, midy);
   }
-/*
-  eraseEdge(edge) {
-    var node1 = edge[0];
-    var node2 = edge[1];
-    this.ctx.strokeStyle = "#FFFFFF";
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-
-    this.ctx.strokeStyle = "#000000";
-    this.drawNode(node1);
-    this.drawNode(node2);
-
-  }
-  */
 
 
   addNode(node) {
@@ -244,7 +220,8 @@ class Graph extends AlgorithmObject {
     }
   }
 
-  handleClick(click) {
+  handleClick(event) {
+    console.log(this);
     if (this.state !== 'write') {
       return;
     }
@@ -364,38 +341,16 @@ class Edge {
 ==================*/
 
 function createGraph(canvas) {
-  var c = canvas
+  var c = canvas;
   var ctx = c.getContext("2d");
 
   var graph = new Graph(ctx, c);
 
-  c.addEventListener("click", onClick);
+  c.addEventListener("click", function(click) {graph.handleClick(click)});
 
   return graph;
 }
 
-function onClick(event) {
-  graph.handleClick(event);
-  /*
-  let x = event.clientX;
-  let y = event.clientY;
-  var closest = graph.getNearestComponent(x, y);
-
-  if (selectedNode === null && closest === null) {
-    graph.addNode(new Node(x, y, "A"));
-  } else if (selectedNode === null) {
-    graph.changeColor(closest, "#00FA9A");
-    selectedNode = closest;
-  } else if (closest === null) {
-    graph.changeColor(selectedNode, "#000000");
-    selectedNode = null;
-  } else {
-    graph.addEdge(new Edge(selectedNode, closest));
-    graph.changeColor(selectedNode, "#000000");
-    selectedNode = null;
-  } */
-
-}
 
 
 // export {Graph, Node, Edge};

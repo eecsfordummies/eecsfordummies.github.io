@@ -1,4 +1,12 @@
-<canvas id="myCanvas" width="1000" height="2000"></canvas>
+
+
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../../css/prism.css">
+    <link rel="stylesheet" href="../../css/algo-style.css">
+    <script src="scripts/prism.js"></script>
+</head>
 
 
 <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
@@ -12,8 +20,9 @@
    REACT STUFF
 ===============-->
 <script src="scripts/sidebar.js"></script>
-<div style="display:inline-block; vertical-align:top;">
-  <div style="position:fixed">
+<div>
+  <canvas id="myCanvas" width="1000" height="2000" style="float:left;"></canvas>
+  <div>
     <div id="input_container" ></div>
     <div id="delete_button_container" ></div>
     <div id="start_kruskals_container" ></div>

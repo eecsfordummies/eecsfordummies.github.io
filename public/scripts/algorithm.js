@@ -1,6 +1,7 @@
 class Algorithm {
   object = null;
   algorithm = null;
+  highlightedLine = 0;
 
   start() {
     this.setObjectAlgorithm();
@@ -15,6 +16,16 @@ class Algorithm {
     }
   }
 
+  iterate() {
+    let continueIteration = true;
+    let prevValue = null;
+    while (continueIteration && prevValue != 1) {
+      let result = this.step();
+      continueIteration = !result.done;
+      prevValue = result.value;
+    }
+  }
+
   step() {
     this.algorithm.next();
   }
@@ -24,6 +35,14 @@ class Algorithm {
   exit() {
     this.reset();
     this.setObjectState('write');
+  }
+
+  displayCode() {
+
+  }
+
+  displayInfo() {
+
   }
 
   getObjectState() {

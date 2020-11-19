@@ -1,0 +1,4 @@
+.code-content {
+  min-width: 0; /* added */
+  overflow: auto; /* added */
+}

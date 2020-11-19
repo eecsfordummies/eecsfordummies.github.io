@@ -11,5 +11,5 @@ createAlgorithmButton(kruskals, "Run Kruskals", "#start_kruskals_container");
 createAlgorithmSidebar(graph, "#algorithm_sidebar_container");
 createAlgorithmButton(prims, "Run Prims", "#start_prims_container");
 // createAlgorithmSidebar(prims, "Prims's Algorithm", "#prims_container");
-
+// createCodeBlock(graph, '#test');
 console.log("HI!");

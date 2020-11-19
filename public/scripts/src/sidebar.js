@@ -139,6 +139,7 @@ class AlgorithmSidebar extends React.Component {
     super(props);
     this.state = {visible: false, object: props.object, algorithm: null};
     this.handleRun = this.handleRun.bind(this);
+    this.handleIterate = this.handleIterate.bind(this);
     this.handleStep = this.handleStep.bind(this);
     this.handleExit = this.handleExit.bind(this);
   }
@@ -160,10 +161,17 @@ class AlgorithmSidebar extends React.Component {
 
   handleRun(event) {
     this.state.algorithm.run();
+    this.forceUpdate();
+  }
+
+  handleIterate(event) {
+    this.state.algorithm.iterate();
+    this.forceUpdate();
   }
 
   handleStep(event) {
     this.state.algorithm.step();
+    this.forceUpdate();
   }
 
   handleExit(event) {
@@ -175,36 +183,107 @@ class AlgorithmSidebar extends React.Component {
       return null;
     }
 
+    let str = this.state.algorithm.displayCode();
+    // let str = 'print(1)';
+    let html = Prism.highlight(str, Prism.languages.python, 'python');
+    let line = this.state.algorithm.highlightedLine;
+    console.log(line);
+    setTimeout(Prism.highlightAll);
+
     return (
       <div>
         <input type="button" value='Run' onClick={this.handleRun}/>
+        <input type="button" value='Iterate' onClick={this.handleIterate}/>
         <input type="button" value='Step' onClick={this.handleStep}/>
         <input type="button" value='Exit' onClick={this.handleExit}/>
+        <pre className="language-python line-numbers" data-line={line}>
+        <code className="language-python" dangerouslySetInnerHTML={{__html: html}}>
+
+        </code>
+        </pre>
       </div>
     );
   }
 }
 
+class CodeBlock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {visible: false, object: props.object, algorithm: null};
+    // this.displayCode = this.displayCode.bind(this);
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+  }
+
+  tick() {
+    if (this.state.object.state !== 'algorithm' && this.state.visible) {
+      this.setState({visible: false});
+    } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
+      this.setState({visible: true, algorithm: this.state.object.algorithm});
+    }
+  }
+
+  /*
+  handleRun(event) {
+    this.state.algorithm.run();
+  }
+
+  handleStep(event) {
+    this.state.algorithm.step();
+  }
+
+  handleExit(event) {
+    this.state.algorithm.exit();
+  } */
+
+  render() {
+
+    if (!this.state.visible) {
+      return null;
+    }
+
+
+    let str = this.state.algorithm.displayCode();
+    // let str = 'print(1)';
+    let html = Prism.highlight(str, Prism.languages.python, 'python')
+    setTimeout(Prism.highlightAll);
+    return (
+      <pre className="language-python line-numbers">
+      <code className="language-python" dangerouslySetInnerHTML={{__html: html}}>
+
+      </code>
+      </pre>
+    );
+  }
+}
+
+
 function createGraphInput(graph, componentID) {
   let domContainer = document.querySelector(componentID);
-
   ReactDOM.render(<InputForm graph={graph}/>, domContainer);
 }
 
 function createDeleteButton(graph, componentID) {
   let domContainer = document.querySelector(componentID);
-
   ReactDOM.render(<DeleteButton graph={graph}/>, domContainer);
 }
 
 function createAlgorithmButton(algorithm, label, componentID) {
   let domContainer = document.querySelector(componentID);
-
   ReactDOM.render(<AlgorithmButton algorithm={algorithm} label={label}/>, domContainer);
 }
 
 function createAlgorithmSidebar(object, componentID) {
   let domContainer = document.querySelector(componentID);
-
   ReactDOM.render(<AlgorithmSidebar object={object}/>, domContainer);
+}
+
+function createCodeBlock(object, componentID) {
+  let domContainer = document.querySelector(componentID);
+  ReactDOM.render(<CodeBlock object={object}/>, domContainer);
 }
