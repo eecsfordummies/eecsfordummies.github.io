@@ -1,7 +1,7 @@
 class Algorithm {
   object = null;
   algorithm = null;
-  highlightedLine = 0;
+  highlightedLine = 1;
 
   start() {
     this.setObjectAlgorithm();
@@ -74,10 +74,21 @@ class Kruskals extends Algorithm {
     this.algorithm = this.kruskals();
   }
 
-  findHead(a) {
+  * findHead(a) {
+    this.highlightedLine = 15;
+    yield 0;
+
     while (this.union.get(a) !== a) {
+      this.highlightedLine = 16;
+      yield 0;
+
       a = this.union.get(a);
+      this.highlightedLine += 1;
+      yield 0;
     }
+
+    this.highlightedLine = 18;
+    yield 0;
     return a;
   }
 
@@ -101,7 +112,7 @@ class Kruskals extends Algorithm {
       yield 0;
 
       this.union.set(node, node);
-      this.highlightedLine = 3;
+      this.highlightedLine += 1;
       yield 0;
     }
 
@@ -115,23 +126,46 @@ class Kruskals extends Algorithm {
       yield 0;
 
       let edge = this.edges.shift(); // edges.pop(0)
-      let n0 = this.findHead(edge.node0);
-      this.highlightedLine = 7;
-      yield 0;
 
-      let n1 = this.findHead(edge.node1);
+      this.highlightedLine += 1;
+      yield 0;
+      let nodeIterator = this.findHead(edge.node0);
+      let n0 = null;
+      let continueIteration = true;
+      while (continueIteration) {
+        let result = nodeIterator.next();
+        continueIteration = !result.done;
+        if (continueIteration) {
+          yield result.value;
+        } else {
+          n0 = result.value;
+        }
+      }
+
       this.highlightedLine = 8;
       yield 0;
+      nodeIterator = this.findHead(edge.node1);
+      let n1 = null;
+      continueIteration = true;
+      while (continueIteration) {
+        let result = nodeIterator.next();
+        continueIteration = !result.done;
+        if (continueIteration) {
+          yield result.value;
+        } else {
+          n1 = result.value;
+        }
+      }
 
       this.highlightedLine = 10;
       yield 0;
       if (n0 !== n1) {
         this.union.set(n0, n1);
-        this.highlightedLine = 11;
+        this.highlightedLine += 1;
         yield 0;
 
         this.graph.changeColor(edge, "red");
-        this.highlightedLine = 12;
+        this.highlightedLine += 1;
         yield 1;
       }
     }
@@ -151,7 +185,7 @@ class Kruskals extends Algorithm {
     this.edges = new Set();
     this.union = new Map();
     this.algorithm = this.kruskals();
-    this.highlightedLine = 0;
+    this.highlightedLine = 1;
   }
 
   run() {

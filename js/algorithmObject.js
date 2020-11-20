@@ -239,7 +239,7 @@ class Graph extends AlgorithmObject {
   }
 
   handleClick(event) {
-    console.log(this);
+    // console.log(this);
     if (this.state !== 'write') {
       return;
     }

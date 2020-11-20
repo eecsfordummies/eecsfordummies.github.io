@@ -249,9 +249,9 @@ var AlgorithmSidebar = function (_React$Component4) {
 
       var str = this.state.algorithm.displayCode();
       // let str = 'print(1)';
-      var html = Prism.highlight(str, Prism.languages.python, 'python');
+      // let html = Prism.highlight(str, Prism.languages.python, 'python');
       var line = this.state.algorithm.highlightedLine;
-      console.log(line);
+      // console.log(line);
       setTimeout(Prism.highlightAll);
 
       return React.createElement(
@@ -263,8 +263,12 @@ var AlgorithmSidebar = function (_React$Component4) {
         React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit }),
         React.createElement(
           "pre",
-          { className: "language-python line-numbers", "data-line": line },
-          React.createElement("code", { className: "language-python", dangerouslySetInnerHTML: { __html: html } })
+          { className: "line-numbers", "data-line": line },
+          React.createElement(
+            "code",
+            { className: "language-python" },
+            str
+          )
         )
       );
     }

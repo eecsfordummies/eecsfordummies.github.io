@@ -185,9 +185,9 @@ class AlgorithmSidebar extends React.Component {
 
     let str = this.state.algorithm.displayCode();
     // let str = 'print(1)';
-    let html = Prism.highlight(str, Prism.languages.python, 'python');
+    // let html = Prism.highlight(str, Prism.languages.python, 'python');
     let line = this.state.algorithm.highlightedLine;
-    console.log(line);
+    // console.log(line);
     setTimeout(Prism.highlightAll);
 
     return (
@@ -196,9 +196,9 @@ class AlgorithmSidebar extends React.Component {
         <input type="button" value='Iterate' onClick={this.handleIterate}/>
         <input type="button" value='Step' onClick={this.handleStep}/>
         <input type="button" value='Exit' onClick={this.handleExit}/>
-        <pre className="language-python line-numbers" data-line={line}>
-        <code className="language-python" dangerouslySetInnerHTML={{__html: html}}>
-
+        <pre className="line-numbers" data-line={line}>
+        <code className="language-python">
+          {str}
         </code>
         </pre>
       </div>
