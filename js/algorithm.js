@@ -1,3 +1,67 @@
+class Algorithm {
+  object = null;
+  algorithm = null;
+  highlightedLine = 0;
+
+  start() {
+    this.setObjectAlgorithm();
+    this.setObjectState('algorithm');
+  }
+
+  run() {
+    let continueIteration = true;
+    while (continueIteration) {
+      let result = this.step();
+      continueIteration = !result.done;
+    }
+  }
+
+  iterate() {
+    let continueIteration = true;
+    let prevValue = null;
+    while (continueIteration && prevValue != 1) {
+      let result = this.step();
+      continueIteration = !result.done;
+      prevValue = result.value;
+    }
+  }
+
+  step() {
+    this.algorithm.next();
+  }
+
+  reset() {}
+
+  exit() {
+    this.reset();
+    this.setObjectState('write');
+  }
+
+  displayCode() {
+
+  }
+
+  displayInfo() {
+
+  }
+
+  getObjectState() {
+    return this.object.state;
+  }
+
+  setObjectState(state) {
+    this.object.setState(state);
+  }
+
+  setObjectAlgorithm() {
+    this.object.setAlgorithm(this);
+  }
+
+  constructor() {}
+}
+
+
+
 class Kruskals extends Algorithm {
   edges = new Array();
   union = new Map();
@@ -49,10 +113,12 @@ class Kruskals extends Algorithm {
     while(this.edges.length > 0) {
       this.highlightedLine = 6;
       yield 0;
+
       let edge = this.edges.shift(); // edges.pop(0)
       let n0 = this.findHead(edge.node0);
       this.highlightedLine = 7;
       yield 0;
+
       let n1 = this.findHead(edge.node1);
       this.highlightedLine = 8;
       yield 0;
@@ -85,6 +151,7 @@ class Kruskals extends Algorithm {
     this.edges = new Set();
     this.union = new Map();
     this.algorithm = this.kruskals();
+    this.highlightedLine = 0;
   }
 
   run() {

@@ -1,3 +1,21 @@
+class AlgorithmObject {
+  constructor() {}
+  state = 'write';
+  algortihm = null;
+
+  setState(state) {
+    this.state = state;
+  }
+
+  setAlgorithm(algorithm) {
+    this.algorithm = algorithm;
+  }
+}
+
+/*=================
+       GRAPHS
+==================*/
+
 function getScrollingPosition() {
   var position = [0, 0];
   if (typeof window.pageYOffset != 'undefined') {
@@ -335,10 +353,6 @@ class Edge {
     this.color = color;
   }
 }
-
-/*=================
-       CANVAS
-==================*/
 
 function createGraph(canvas) {
   var c = canvas;
