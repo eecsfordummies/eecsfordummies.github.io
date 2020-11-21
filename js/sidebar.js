@@ -247,7 +247,8 @@ var AlgorithmSidebar = function (_React$Component4) {
         return null;
       }
 
-      var str = this.state.algorithm.displayCode();
+      var code = this.state.algorithm.displayCode();
+      var info = this.state.algorithm.displayInfo();
       // let str = 'print(1)';
       // let html = Prism.highlight(str, Prism.languages.python, 'python');
       var line = this.state.algorithm.highlightedLine;
@@ -267,9 +268,10 @@ var AlgorithmSidebar = function (_React$Component4) {
           React.createElement(
             "code",
             { className: "language-python" },
-            str
+            code
           )
-        )
+        ),
+        React.createElement("div", { dangerouslySetInnerHTML: { __html: info } })
       );
     }
   }]);
@@ -277,71 +279,57 @@ var AlgorithmSidebar = function (_React$Component4) {
   return AlgorithmSidebar;
 }(React.Component);
 
-var CodeBlock = function (_React$Component5) {
-  _inherits(CodeBlock, _React$Component5);
-
-  function CodeBlock(props) {
-    _classCallCheck(this, CodeBlock);
-
-    var _this9 = _possibleConstructorReturn(this, (CodeBlock.__proto__ || Object.getPrototypeOf(CodeBlock)).call(this, props));
-
-    _this9.state = { visible: false, object: props.object, algorithm: null };
+/*
+class CodeBlock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {visible: false, object: props.object, algorithm: null};
     // this.displayCode = this.displayCode.bind(this);
-    return _this9;
   }
 
-  _createClass(CodeBlock, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this10 = this;
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    );
+  }
 
-      this.timerID = setInterval(function () {
-        return _this10.tick();
-      }, 100);
+  tick() {
+    if (this.state.object.state !== 'algorithm' && this.state.visible) {
+      this.setState({visible: false});
+    } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
+      this.setState({visible: true, algorithm: this.state.object.algorithm});
     }
-  }, {
-    key: "tick",
-    value: function tick() {
-      if (this.state.object.state !== 'algorithm' && this.state.visible) {
-        this.setState({ visible: false });
-      } else if (this.state.object.state === 'algorithm' && !this.state.visible) {
-        this.setState({ visible: true, algorithm: this.state.object.algorithm });
-      }
-    }
+  }
 
-    /*
-    handleRun(event) {
-      this.state.algorithm.run();
-    }
-     handleStep(event) {
-      this.state.algorithm.step();
-    }
-     handleExit(event) {
-      this.state.algorithm.exit();
-    } */
+  /*
+  handleRun(event) {
+    this.state.algorithm.run();
+  }
 
-  }, {
-    key: "render",
-    value: function render() {
+  handleStep(event) {
+    this.state.algorithm.step();
+  }
 
-      if (!this.state.visible) {
-        return null;
-      }
-
-      var str = this.state.algorithm.displayCode();
-      // let str = 'print(1)';
-      var html = Prism.highlight(str, Prism.languages.python, 'python');
-      setTimeout(Prism.highlightAll);
-      return React.createElement(
-        "pre",
-        { className: "language-python line-numbers" },
-        React.createElement("code", { className: "language-python", dangerouslySetInnerHTML: { __html: html } })
-      );
-    }
-  }]);
-
-  return CodeBlock;
-}(React.Component);
+  handleExit(event) {
+    this.state.algorithm.exit();
+  } */ /*
+       render() {
+       if (!this.state.visible) {
+       return null;
+       }
+       let str = this.state.algorithm.displayCode();
+       // let str = 'print(1)';
+       let html = Prism.highlight(str, Prism.languages.python, 'python')
+       setTimeout(Prism.highlightAll);
+       return (
+       <pre className="language-python line-numbers">
+       <code className="language-python" dangerouslySetInnerHTML={{__html: html}}>
+        </code>
+       </pre>
+       );
+       }
+       } */
 
 function createGraphInput(graph, componentID) {
   var domContainer = document.querySelector(componentID);

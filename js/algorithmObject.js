@@ -81,6 +81,7 @@ class Graph extends AlgorithmObject {
     this.edges = new Set();
     this.ctx = ctx;
     this.canvas = canvas;
+    this.rect = canvas.getBoundingClientRect();
   }
 
   drawNode(node) {
@@ -247,9 +248,8 @@ class Graph extends AlgorithmObject {
     let x = event.clientX;
     let y = event.clientY;
     let scrollPos = getScrollingPosition();
-
-    x += scrollPos[0];
-    y += scrollPos[1];
+    x += scrollPos[0] - this.rect.left;
+    y += scrollPos[1] - this.rect.top;
 
     var closest = this.getNearestComponent(x, y);
 

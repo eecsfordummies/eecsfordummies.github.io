@@ -183,7 +183,8 @@ class AlgorithmSidebar extends React.Component {
       return null;
     }
 
-    let str = this.state.algorithm.displayCode();
+    let code = this.state.algorithm.displayCode();
+    let info = this.state.algorithm.displayInfo();
     // let str = 'print(1)';
     // let html = Prism.highlight(str, Prism.languages.python, 'python');
     let line = this.state.algorithm.highlightedLine;
@@ -197,15 +198,17 @@ class AlgorithmSidebar extends React.Component {
         <input type="button" value='Step' onClick={this.handleStep}/>
         <input type="button" value='Exit' onClick={this.handleExit}/>
         <pre className="line-numbers" data-line={line}>
-        <code className="language-python">
-          {str}
-        </code>
+          <code className="language-python">
+          {code}
+          </code>
         </pre>
+        <div dangerouslySetInnerHTML={{__html: info}}></div>
       </div>
     );
   }
 }
 
+/*
 class CodeBlock extends React.Component {
   constructor(props) {
     super(props);
@@ -239,7 +242,7 @@ class CodeBlock extends React.Component {
 
   handleExit(event) {
     this.state.algorithm.exit();
-  } */
+  } *//*
 
   render() {
 
@@ -260,7 +263,7 @@ class CodeBlock extends React.Component {
       </pre>
     );
   }
-}
+} */
 
 
 function createGraphInput(graph, componentID) {

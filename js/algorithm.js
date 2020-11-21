@@ -63,9 +63,17 @@ class Algorithm {
 
 
 class Kruskals extends Algorithm {
-  edges = new Array();
-  union = new Map();
+  // will not change
   graph = null;
+
+  // will change
+  edges = new Array();
+  addedEdges = new Array();
+  edge = null;
+  union = new Map();
+  n0 = null;
+  n1 = null;
+  a = null;
 
   constructor(graph) {
     super();
@@ -75,21 +83,21 @@ class Kruskals extends Algorithm {
   }
 
   * findHead(a) {
-    this.highlightedLine = 15;
+    this.a = a;
+    this.highlightedLine = 16;
     yield 0;
 
-    while (this.union.get(a) !== a) {
-      this.highlightedLine = 16;
+    while (this.union.get(this.a) !== this.a) {
+      this.highlightedLine = 17;
       yield 0;
 
-      a = this.union.get(a);
+      this.a = this.union.get(this.a);
       this.highlightedLine += 1;
       yield 0;
     }
 
-    this.highlightedLine = 18;
+    this.highlightedLine = 19;
     yield 0;
-    return a;
   }
 
   compare(a, b) {
@@ -125,50 +133,36 @@ class Kruskals extends Algorithm {
       this.highlightedLine = 6;
       yield 0;
 
-      let edge = this.edges.shift(); // edges.pop(0)
+      this.edge = this.edges.shift(); // edges.pop(0)
 
       this.highlightedLine += 1;
       yield 0;
-      let nodeIterator = this.findHead(edge.node0);
-      let n0 = null;
-      let continueIteration = true;
-      while (continueIteration) {
-        let result = nodeIterator.next();
-        continueIteration = !result.done;
-        if (continueIteration) {
-          yield result.value;
-        } else {
-          n0 = result.value;
-        }
-      }
+      yield* this.findHead(this.edge.node0);
+      this.n0 = this.a;
+      this.a = null;
 
       this.highlightedLine = 8;
       yield 0;
-      nodeIterator = this.findHead(edge.node1);
-      let n1 = null;
-      continueIteration = true;
-      while (continueIteration) {
-        let result = nodeIterator.next();
-        continueIteration = !result.done;
-        if (continueIteration) {
-          yield result.value;
-        } else {
-          n1 = result.value;
-        }
-      }
+      yield* this.findHead(this.edge.node1);
+      this.n1 = this.a;
+      this.a = null;
 
       this.highlightedLine = 10;
       yield 0;
-      if (n0 !== n1) {
-        this.union.set(n0, n1);
+      if (this.n0 !== this.n1) {
+        this.union.set(this.n0, this.n1);
         this.highlightedLine += 1;
         yield 0;
 
-        this.graph.changeColor(edge, "red");
+        this.addedEdges.push(this.edge);
+        this.graph.changeColor(this.edge, "red");
         this.highlightedLine += 1;
         yield 1;
       }
     }
+
+    this.highlightedLine = 13;
+    return;
   }
 
   start() {
@@ -182,10 +176,18 @@ class Kruskals extends Algorithm {
     for (let edge of this.graph.edges) {
       this.graph.changeColor(edge, "black");
     }
-    this.edges = new Set();
-    this.union = new Map();
-    this.algorithm = this.kruskals();
+    // general algorithm reset
     this.highlightedLine = 1;
+    this.algorithm = this.kruskals();
+
+    // algorithm-specific reset
+    this.edges = new Array();
+    this.addedEdges = new Array();
+    this.edge = null;
+    this.union = new Map();
+    this.n0 = null;
+    this.n1 = null;
+    this.a = null;
   }
 
   run() {
@@ -214,6 +216,7 @@ class Kruskals extends Algorithm {
                '\tif node0 != node1:\n' +
                '\t\tunion[node0] = node1\n' +
                '\t\tadd(edge) # adds this edge to final graph\n' +
+               'exit(0)\n' +
                '\n' +
                '\n' +
                'def findHead(node):\n' +
@@ -221,6 +224,65 @@ class Kruskals extends Algorithm {
                '\t\tnode = union[node]\n' +
                '\treturn node\n';
     return code;
+  }
+  displayInfo() {
+    let info = '';
+
+    // Nodes
+    let nodes = Array.from(this.graph.nodes);
+    info += 'Nodes: {';
+    for (let i = 0; i < nodes.length; i++) {
+      info += nodes[i].label;
+      if (i < nodes.length - 1) {
+        info += ', ';
+      }
+    }
+    info += '}<br>';
+
+    // Edges
+    let edges = Array.from(this.graph.edges);
+    info += 'Edges: {';
+    for (let i = 0; i < edges.length; i++) {
+      let edge = edges[i];
+      info += '(' + edge.node0.label + ', ' + edge.node1.label + ')';
+      if (i < edges.length - 1) {
+        info += ', ';
+      }
+    }
+    info += '}<br>';
+
+    // Added edges
+    info += 'Added edges: {';
+    for (let i = 0; i < this.addedEdges.length; i++) {
+      let edge = this.addedEdges[i];
+      info += '(' + edge.node0.label + ', ' + edge.node1.label + ')';
+      if (i < this.addedEdges.length - 1) {
+        info += ', ';
+      }
+    }
+    info += '}<br>';
+
+    if (this.edge !== null) {
+      info += 'edge: (' + this.edge.node0.label + ', ' + this.edge.node1.label + ')<br>';
+    }
+    if (this.n0 !== null) {
+      info += 'node0: ' + this.n0.label + '<br>';
+    }
+    if (this.n1 !== null) {
+      info += 'node1: ' + this.n1.label + '<br>';
+    }
+
+    /*let info = 'Nodes: ' + this.graph.nodes + '\n' +
+               'Edges: ' + this.graph.edges + '\n' +
+               'Added edges: ' + this.addedEdges + '\n' +
+               'edge: ' + this.edge + '\n' +
+               'union: ' + this.union + '\n' +
+               'node0: ' + this.n0 + '\n' +
+               'node1: ' + this.n1 + '\n' +
+               '\n' +
+               'findHead(a):\n' +
+               'a: ' + this.a;*/
+    return info;
   }
 }
 
