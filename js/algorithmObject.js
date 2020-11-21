@@ -1,3 +1,21 @@
+class AlgorithmObject {
+  constructor() {}
+  state = 'write';
+  algortihm = null;
+
+  setState(state) {
+    this.state = state;
+  }
+
+  setAlgorithm(algorithm) {
+    this.algorithm = algorithm;
+  }
+}
+
+/*=================
+       GRAPHS
+==================*/
+
 function getScrollingPosition() {
   var position = [0, 0];
   if (typeof window.pageYOffset != 'undefined') {
@@ -53,11 +71,12 @@ function pDistance(x, y, x1, y1, x2, y2) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-class Graph {
+class Graph extends AlgorithmObject {
   radius = 40;
   selected = null;
 
   constructor(ctx, canvas) {
+    super();
     this.nodes = new Set();
     this.edges = new Set();
     this.ctx = ctx;
@@ -118,30 +137,6 @@ class Graph {
     this.ctx.textBaseline = 'middle';
     this.ctx.fillText(edge.weight, midx, midy);
   }
-/*
-  eraseEdge(edge) {
-    var node1 = edge[0];
-    var node2 = edge[1];
-    this.ctx.strokeStyle = "#FFFFFF";
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-    this.drawEdge(edge);
-    this.drawNode(node1);
-    this.drawNode(node2);
-
-    this.ctx.strokeStyle = "#000000";
-    this.drawNode(node1);
-    this.drawNode(node2);
-
-  }
-  */
 
 
   addNode(node) {
@@ -243,7 +238,12 @@ class Graph {
     }
   }
 
-  handleClick(click) {
+  handleClick(event) {
+    // console.log(this);
+    if (this.state !== 'write') {
+      return;
+    }
+
     let x = event.clientX;
     let y = event.clientY;
     let scrollPos = getScrollingPosition();
@@ -274,6 +274,9 @@ class Graph {
   }
 
   deselectSelected() {
+    if (this.selected === null) {
+      return;
+    }
     this.changeColor(this.selected, "#000000");
     this.selected = null;
   }
@@ -351,43 +354,17 @@ class Edge {
   }
 }
 
-/*=================
-       CANVAS
-==================*/
-
 function createGraph(canvas) {
-  var c = canvas
+  var c = canvas;
   var ctx = c.getContext("2d");
 
   var graph = new Graph(ctx, c);
 
-  c.addEventListener("click", onClick);
+  c.addEventListener("click", function(click) {graph.handleClick(click)});
 
   return graph;
 }
 
-function onClick(event) {
-  graph.handleClick(event);
-  /*
-  let x = event.clientX;
-  let y = event.clientY;
-  var closest = graph.getNearestComponent(x, y);
-
-  if (selectedNode === null && closest === null) {
-    graph.addNode(new Node(x, y, "A"));
-  } else if (selectedNode === null) {
-    graph.changeColor(closest, "#00FA9A");
-    selectedNode = closest;
-  } else if (closest === null) {
-    graph.changeColor(selectedNode, "#000000");
-    selectedNode = null;
-  } else {
-    graph.addEdge(new Edge(selectedNode, closest));
-    graph.changeColor(selectedNode, "#000000");
-    selectedNode = null;
-  } */
-
-}
 
 
 // export {Graph, Node, Edge};

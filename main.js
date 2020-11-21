@@ -3,10 +3,8 @@ const app = express();
 var path = require('path');
 
 app.use(express.static(__dirname));
-app.use("/scripts",  express.static(__dirname + '/public'));
+//Serve static content for the app from the "public" directory in the application directory.
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + 'index.html'));
-});
+//app.use("/css", express.static(__dirname + '/csss'));
 
 app.listen(3000, () => console.log('Gator app listening on port 3000!'));
