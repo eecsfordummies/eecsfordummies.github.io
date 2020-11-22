@@ -2,6 +2,8 @@ class Algorithm {
   object = null;
   algorithm = null;
   highlightedLine = 1;
+  stack = new Array();
+  ret = null;
 
   start() {
     this.setObjectAlgorithm();
@@ -73,7 +75,7 @@ class Kruskals extends Algorithm {
   union = new Map();
   n0 = null;
   n1 = null;
-  a = null;
+  // a = null;
 
   constructor(graph) {
     super();
@@ -83,19 +85,23 @@ class Kruskals extends Algorithm {
   }
 
   * findHead(a) {
-    this.a = a;
+    let frame = new Map();
+    frame.set('function', 'findHead');
+    frame.set('a', a);
+    this.stack.push(frame);
     this.highlightedLine = 16;
     yield 0;
 
-    while (this.union.get(this.a) !== this.a) {
+    while (this.union.get(frame.get('a')) !== frame.get('a')) {
       this.highlightedLine = 17;
       yield 0;
 
-      this.a = this.union.get(this.a);
+      frame.set('a', this.union.get(frame.get('a')));
       this.highlightedLine += 1;
       yield 0;
     }
 
+    this.ret = frame.get('a');
     this.highlightedLine = 19;
     yield 0;
   }
@@ -138,14 +144,14 @@ class Kruskals extends Algorithm {
       this.highlightedLine += 1;
       yield 0;
       yield* this.findHead(this.edge.node0);
-      this.n0 = this.a;
-      this.a = null;
+      this.n0 = this.ret;
+      this.stack.pop();
 
       this.highlightedLine = 8;
       yield 0;
       yield* this.findHead(this.edge.node1);
-      this.n1 = this.a;
-      this.a = null;
+      this.n1 = this.ret;
+      this.stack.pop();
 
       this.highlightedLine = 10;
       yield 0;
@@ -178,9 +184,11 @@ class Kruskals extends Algorithm {
     }
     // general algorithm reset
     this.highlightedLine = 1;
-    this.algorithm = this.kruskals();
+    this.stack = new Array();
+    this.ret = null;
 
     // algorithm-specific reset
+    this.algorithm = this.kruskals();
     this.edges = new Array();
     this.addedEdges = new Array();
     this.edge = null;
@@ -270,6 +278,14 @@ class Kruskals extends Algorithm {
     }
     if (this.n1 !== null) {
       info += 'node1: ' + this.n1.label + '<br>';
+    }
+
+    for (let frame of this.stack) {
+      info += '<br>';
+      let keys = frame.keys();
+      for (let key of keys) {
+        info += key + ': ' + frame.get(key) + '<br>';
+      }
     }
 
     /*let info = 'Nodes: ' + this.graph.nodes + '\n' +
