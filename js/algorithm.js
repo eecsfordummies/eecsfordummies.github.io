@@ -70,9 +70,9 @@ class Kruskals extends Algorithm {
 
   // will change
   edges = new Array();
-  addedEdges = new Array();
+  addedEdges = new Set();
   edge = null;
-  union = new Map();
+  union = null;
   n0 = null;
   n1 = null;
   // a = null;
@@ -160,7 +160,7 @@ class Kruskals extends Algorithm {
         this.highlightedLine += 1;
         yield 0;
 
-        this.addedEdges.push(this.edge);
+        this.addedEdges.add(this.edge);
         this.graph.changeColor(this.edge, "red");
         this.highlightedLine += 1;
         yield 1;
@@ -190,9 +190,9 @@ class Kruskals extends Algorithm {
     // algorithm-specific reset
     this.algorithm = this.kruskals();
     this.edges = new Array();
-    this.addedEdges = new Array();
+    this.addedEdges = new Set();
     this.edge = null;
-    this.union = new Map();
+    this.union = null;
     this.n0 = null;
     this.n1 = null;
     this.a = null;
@@ -233,58 +233,32 @@ class Kruskals extends Algorithm {
                '\treturn node\n';
     return code;
   }
+
   displayInfo() {
     let info = '';
 
-    // Nodes
-    let nodes = Array.from(this.graph.nodes);
-    info += 'Nodes: {';
-    for (let i = 0; i < nodes.length; i++) {
-      info += nodes[i].label;
-      if (i < nodes.length - 1) {
-        info += ', ';
-      }
-    }
-    info += '}<br>';
+    info += 'Nodes: ' + this.graph.nodes.toString() + '<br>';
+    info += 'All edges: ' + this.graph.edges.toString() + '<br>';
+    info += 'Added edges: ' + this.addedEdges.toString() + '<br>';
 
-    // Edges
-    let edges = Array.from(this.graph.edges);
-    info += 'Edges: {';
-    for (let i = 0; i < edges.length; i++) {
-      let edge = edges[i];
-      info += '(' + edge.node0.label + ', ' + edge.node1.label + ')';
-      if (i < edges.length - 1) {
-        info += ', ';
-      }
+    if (this.union !== null) {
+      info += 'union: ' + this.union.toString() + '<br>';
     }
-    info += '}<br>';
-
-    // Added edges
-    info += 'Added edges: {';
-    for (let i = 0; i < this.addedEdges.length; i++) {
-      let edge = this.addedEdges[i];
-      info += '(' + edge.node0.label + ', ' + edge.node1.label + ')';
-      if (i < this.addedEdges.length - 1) {
-        info += ', ';
-      }
-    }
-    info += '}<br>';
-
     if (this.edge !== null) {
-      info += 'edge: (' + this.edge.node0.label + ', ' + this.edge.node1.label + ')<br>';
+      info += 'edge: ' + this.edge.toString() + '<br>';
     }
     if (this.n0 !== null) {
-      info += 'node0: ' + this.n0.label + '<br>';
+      info += 'node0: ' + this.n0.toString() + '<br>';
     }
     if (this.n1 !== null) {
-      info += 'node1: ' + this.n1.label + '<br>';
+      info += 'node1: ' + this.n1.toString() + '<br>';
     }
 
     for (let frame of this.stack) {
       info += '<br>';
       let keys = frame.keys();
       for (let key of keys) {
-        info += key + ': ' + frame.get(key) + '<br>';
+        info += key + ': ' + frame.get(key).toString() + '<br>';
       }
     }
 
@@ -304,4 +278,69 @@ class Kruskals extends Algorithm {
 
 function createKruskals(graph) {
   return new Kruskals(graph);
+}
+
+/*
+class Frame {
+  variables = new Map();
+
+  constructor(name, parent) {
+    this.name = name;
+    this.parent = parent;
+  }
+
+  set(varName, value) {
+    this.variables.set(varName, value);
+  }
+
+  get(varName) {
+    if (this.varables.has(varName)) {
+      return this.variables.get(varName);
+    } else {
+      return
+    }
+  }
+}
+
+*/
+
+// Modified toStrings
+
+Array.prototype.toString = function() {
+  rv = '[';
+  for (let i = 0; i < this.length; i++) {
+    rv += this[i].toString();
+    if (i < this.length - 1) {
+      rv += ', ';
+    }
+  }
+  rv += ']';
+  return rv;
+}
+
+Set.prototype.toString = function() {
+  let temp = Array.from(this);
+  rv = '{';
+  for (let i = 0; i < temp.length; i++) {
+    rv += temp[i].toString();
+    if (i < temp.length - 1) {
+      rv += ', ';
+    }
+  }
+  rv += '}';
+  return rv;
+}
+
+Map.prototype.toString = function() {
+  let keys = Array.from(this.keys());
+  rv = '{';
+  for (let i = 0; i < keys.length; i++) {
+    key = keys[i];
+    rv += key.toString() + ': ' + this.get(key).toString();
+    if (i < keys.length - 1) {
+      rv += ', ';
+    }
+  }
+  rv += '}';
+  return rv;
 }

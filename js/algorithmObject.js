@@ -334,6 +334,10 @@ class Node {
   setLabel(label) {
     this.label = label;
   }
+
+  toString() {
+    return this.label;
+  }
 }
 
 class Edge {
@@ -351,6 +355,10 @@ class Edge {
 
   setColor(color) {
     this.color = color;
+  }
+
+  toString() {
+    return '(' + this.node0.toString() + ', ' + this.node1.toString() + ')';
   }
 }
 
