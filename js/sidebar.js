@@ -195,6 +195,7 @@ var AlgorithmSidebar = function (_React$Component4) {
     _this7.handleRun = _this7.handleRun.bind(_this7);
     _this7.handleIterate = _this7.handleIterate.bind(_this7);
     _this7.handleStep = _this7.handleStep.bind(_this7);
+    _this7.handleRestart = _this7.handleRestart.bind(_this7);
     _this7.handleExit = _this7.handleExit.bind(_this7);
     return _this7;
   }
@@ -236,6 +237,12 @@ var AlgorithmSidebar = function (_React$Component4) {
       this.forceUpdate();
     }
   }, {
+    key: "handleRestart",
+    value: function handleRestart(event) {
+      this.state.algorithm.reset();
+      this.forceUpdate();
+    }
+  }, {
     key: "handleExit",
     value: function handleExit(event) {
       this.state.algorithm.exit();
@@ -261,6 +268,7 @@ var AlgorithmSidebar = function (_React$Component4) {
         React.createElement("input", { type: "button", value: "Run", onClick: this.handleRun }),
         React.createElement("input", { type: "button", value: "Iterate", onClick: this.handleIterate }),
         React.createElement("input", { type: "button", value: "Step", onClick: this.handleStep }),
+        React.createElement("input", { type: "button", value: "Restart", onClick: this.handleRestart }),
         React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit }),
         React.createElement(
           "pre",

@@ -141,6 +141,7 @@ class AlgorithmSidebar extends React.Component {
     this.handleRun = this.handleRun.bind(this);
     this.handleIterate = this.handleIterate.bind(this);
     this.handleStep = this.handleStep.bind(this);
+    this.handleRestart = this.handleRestart.bind(this);
     this.handleExit = this.handleExit.bind(this);
   }
 
@@ -174,6 +175,11 @@ class AlgorithmSidebar extends React.Component {
     this.forceUpdate();
   }
 
+  handleRestart(event) {
+    this.state.algorithm.reset();
+    this.forceUpdate();
+  }
+
   handleExit(event) {
     this.state.algorithm.exit();
   }
@@ -196,6 +202,7 @@ class AlgorithmSidebar extends React.Component {
         <input type="button" value='Run' onClick={this.handleRun}/>
         <input type="button" value='Iterate' onClick={this.handleIterate}/>
         <input type="button" value='Step' onClick={this.handleStep}/>
+        <input type="button" value='Restart' onClick={this.handleRestart}/>
         <input type="button" value='Exit' onClick={this.handleExit}/>
         <pre className="line-numbers" data-line={line}>
           <code className="language-python">

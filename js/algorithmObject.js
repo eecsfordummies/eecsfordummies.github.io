@@ -163,21 +163,25 @@ class Graph extends AlgorithmObject {
     var node1 = edge.node1;
 
     if (node0 == node1) {
-      return;
+      return -1;
     }
 
     for (let currEdge of this.edges) {
       // console.log("hii");
       if ((currEdge.node0 == node0 && currEdge.node1 == node1) || (currEdge.node0 == node1 && currEdge.node1 == node0)) {
         // console.log("hi");
-        return;
+        return -1;
       }
     }
 
     if (this.nodes.has(node0) && this.nodes.has(node1)) {
       this.edges.add(edge);
       this.drawEdge(edge);
+    } else {
+      return -1;
     }
+
+    return 0;
   }
 
   removeEdge(edge) {
@@ -260,8 +264,12 @@ class Graph extends AlgorithmObject {
     } else if (closest === null) {
       this.deselectSelected();
     } else if (this.selected instanceof Node && closest instanceof Node) {
-      this.addEdge(new Edge(this.selected, closest));
-      this.deselectSelected();
+      if (this.addEdge(new Edge(this.selected, closest)) < 0) {
+        this.deselectSelected();
+        this.select(closest);
+      } else {
+        this.deselectSelected();
+      }
     } else {
       this.deselectSelected();
       this.select(closest);
@@ -269,6 +277,7 @@ class Graph extends AlgorithmObject {
   }
 
   select(component) {
+    // this.deselectSelected(); should I include?
     this.changeColor(component, "#00FA9A");
     this.selected = component;
   }

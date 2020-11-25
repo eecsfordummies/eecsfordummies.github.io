@@ -71,8 +71,9 @@ class Kruskals extends Algorithm {
   // will change
   edges = new Array();
   addedEdges = new Set();
-  edge = null;
   union = null;
+  node = null;
+  edge = null;
   n0 = null;
   n1 = null;
   // a = null;
@@ -87,21 +88,21 @@ class Kruskals extends Algorithm {
   * findHead(a) {
     let frame = new Map();
     frame.set('function', 'findHead');
-    frame.set('a', a);
+    frame.set('node', a);
     this.stack.push(frame);
     this.highlightedLine = 16;
     yield 0;
 
-    while (this.union.get(frame.get('a')) !== frame.get('a')) {
+    while (this.union.get(frame.get('node')) !== frame.get('node')) {
       this.highlightedLine = 17;
       yield 0;
 
-      frame.set('a', this.union.get(frame.get('a')));
+      frame.set('node', this.union.get(frame.get('node')));
       this.highlightedLine += 1;
       yield 0;
     }
 
-    this.ret = frame.get('a');
+    this.ret = frame.get('node');
     this.highlightedLine = 19;
     yield 0;
   }
@@ -121,11 +122,11 @@ class Kruskals extends Algorithm {
 
     this.union = new Map();
 
-    for (let node of this.graph.nodes) {
+    for (this.node of this.graph.nodes) {
       this.highlightedLine = 2;
       yield 0;
 
-      this.union.set(node, node);
+      this.union.set(this.node, this.node);
       this.highlightedLine += 1;
       yield 0;
     }
@@ -135,11 +136,9 @@ class Kruskals extends Algorithm {
     this.highlightedLine = 5;
     yield 0;
 
-    while(this.edges.length > 0) {
+    for (this.edge of this.graph.edges) {
       this.highlightedLine = 6;
       yield 0;
-
-      this.edge = this.edges.shift(); // edges.pop(0)
 
       this.highlightedLine += 1;
       yield 0;
@@ -193,6 +192,7 @@ class Kruskals extends Algorithm {
     this.addedEdges = new Set();
     this.edge = null;
     this.union = null;
+    this.node = null;
     this.n0 = null;
     this.n1 = null;
     this.a = null;
@@ -237,12 +237,17 @@ class Kruskals extends Algorithm {
   displayInfo() {
     let info = '';
 
+    // General fields (always initialized)
     info += 'Nodes: ' + this.graph.nodes.toString() + '<br>';
     info += 'All edges: ' + this.graph.edges.toString() + '<br>';
     info += 'Added edges: ' + this.addedEdges.toString() + '<br>';
 
+    // Initialized while running
     if (this.union !== null) {
       info += 'union: ' + this.union.toString() + '<br>';
+    }
+    if (this.node !== null) {
+      info += 'node: ' + this.node.toString() + '<br>';
     }
     if (this.edge !== null) {
       info += 'edge: ' + this.edge.toString() + '<br>';
@@ -254,6 +259,7 @@ class Kruskals extends Algorithm {
       info += 'node1: ' + this.n1.toString() + '<br>';
     }
 
+    // stack
     for (let frame of this.stack) {
       info += '<br>';
       let keys = frame.keys();
