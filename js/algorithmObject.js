@@ -1,7 +1,7 @@
 class AlgorithmObject {
   constructor() {}
   state = 'write';
-  algortihm = null;
+  algorithm = new Algorithm();
 
   setState(state) {
     this.state = state;
@@ -77,6 +77,7 @@ class Graph extends AlgorithmObject {
 
   constructor(ctx, canvas) {
     super();
+
     this.nodes = new Set();
     this.edges = new Set();
     this.ctx = ctx;

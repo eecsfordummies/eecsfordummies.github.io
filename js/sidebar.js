@@ -57,10 +57,6 @@ var InputForm = function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      if (!this.state.visible) {
-        return null;
-      }
-
       var label = "Enter node value:";
       if (this.state.graph.selected instanceof Edge) {
         label = "Enter edge weight (integer):";
@@ -68,7 +64,7 @@ var InputForm = function (_React$Component) {
 
       return React.createElement(
         "form",
-        { onSubmit: this.handleSubmit },
+        { onSubmit: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } },
         React.createElement(
           "label",
           null,
@@ -122,11 +118,7 @@ var DeleteButton = function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      if (!this.state.visible) {
-        return null;
-      }
-
-      return React.createElement("input", { type: "button", value: "Delete", onClick: this.handleSubmit });
+      return React.createElement("input", { type: "button", value: "Delete", onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
     }
   }]);
 
@@ -172,11 +164,7 @@ var AlgorithmButton = function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      if (!this.state.visible) {
-        return null;
-      }
-
-      return React.createElement("input", { type: "button", value: this.state.label, onClick: this.handleSubmit });
+      return React.createElement("input", { type: "button", value: this.state.label, onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
     }
   }]);
 
@@ -191,7 +179,7 @@ var AlgorithmSidebar = function (_React$Component4) {
 
     var _this7 = _possibleConstructorReturn(this, (AlgorithmSidebar.__proto__ || Object.getPrototypeOf(AlgorithmSidebar)).call(this, props));
 
-    _this7.state = { visible: false, object: props.object, algorithm: null };
+    _this7.state = { visible: false, object: props.object, algorithm: props.object.algorithm };
     _this7.handleRun = _this7.handleRun.bind(_this7);
     _this7.handleIterate = _this7.handleIterate.bind(_this7);
     _this7.handleStep = _this7.handleStep.bind(_this7);
@@ -250,10 +238,6 @@ var AlgorithmSidebar = function (_React$Component4) {
   }, {
     key: "render",
     value: function render() {
-      if (!this.state.visible) {
-        return null;
-      }
-
       var code = this.state.algorithm.displayCode();
       var info = this.state.algorithm.displayInfo();
       // let str = 'print(1)';
@@ -264,7 +248,7 @@ var AlgorithmSidebar = function (_React$Component4) {
 
       return React.createElement(
         "div",
-        null,
+        { style: { display: this.state.visible ? 'block' : 'none' } },
         React.createElement("input", { type: "button", value: "Run", onClick: this.handleRun }),
         React.createElement("input", { type: "button", value: "Iterate", onClick: this.handleIterate }),
         React.createElement("input", { type: "button", value: "Step", onClick: this.handleStep }),

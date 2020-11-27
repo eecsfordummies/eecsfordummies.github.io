@@ -40,11 +40,11 @@ class Algorithm {
   }
 
   displayCode() {
-
+    return '';
   }
 
   displayInfo() {
-
+    return '';
   }
 
   getObjectState() {

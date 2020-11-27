@@ -38,17 +38,13 @@ class InputForm extends React.Component {
   }
 
   render() {
-    if (!this.state.visible) {
-      return null;
-    }
-
     let label = "Enter node value:";
     if (this.state.graph.selected instanceof Edge)  {
       label = "Enter edge weight (integer):";
     }
 
     return (
-      <form onSubmit={this.handleSubmit} >
+      <form onSubmit={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}>
         <label>
           {label}
           <input type="text" value={this.state.value} onChange={this.handleChange} style={{width: "50px" }} />
@@ -87,12 +83,8 @@ class DeleteButton extends React.Component {
   }
 
   render() {
-    if (!this.state.visible) {
-      return null;
-    }
-
     return (
-      <input type="button" value="Delete" onClick={this.handleSubmit}/>
+      <input type="button" value="Delete" onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
     );
   }
 }
@@ -124,12 +116,8 @@ class AlgorithmButton extends React.Component {
   }
 
   render() {
-    if (!this.state.visible) {
-      return null;
-    }
-
     return (
-      <input type="button" value={this.state.label} onClick={this.handleSubmit}/>
+      <input type="button" value={this.state.label} onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
     );
   }
 }
@@ -137,7 +125,7 @@ class AlgorithmButton extends React.Component {
 class AlgorithmSidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {visible: false, object: props.object, algorithm: null};
+    this.state = {visible: false, object: props.object, algorithm: props.object.algorithm};
     this.handleRun = this.handleRun.bind(this);
     this.handleIterate = this.handleIterate.bind(this);
     this.handleStep = this.handleStep.bind(this);
@@ -185,10 +173,6 @@ class AlgorithmSidebar extends React.Component {
   }
 
   render() {
-    if (!this.state.visible) {
-      return null;
-    }
-
     let code = this.state.algorithm.displayCode();
     let info = this.state.algorithm.displayInfo();
     // let str = 'print(1)';
@@ -198,7 +182,7 @@ class AlgorithmSidebar extends React.Component {
     setTimeout(Prism.highlightAll);
 
     return (
-      <div>
+      <div style={{display: this.state.visible ? 'block' : 'none' }}>
         <input type="button" value='Run' onClick={this.handleRun}/>
         <input type="button" value='Iterate' onClick={this.handleIterate}/>
         <input type="button" value='Step' onClick={this.handleStep}/>
