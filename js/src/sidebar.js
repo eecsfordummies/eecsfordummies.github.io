@@ -281,3 +281,57 @@ function createCodeBlock(object, componentID) {
   let domContainer = document.querySelector(componentID);
   ReactDOM.render(<CodeBlock object={object}/>, domContainer);
 }
+
+class MinspanSidebar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {visible: true, graph: props.graph, kruskals: props.kruskals, prims: props.prims, tab: "about"};
+    this.handleAbout = this.handleAbout.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+  }
+
+  componentDidMount() {
+    /*
+    this.timerID = setInterval(
+      () => this.tick(),
+      100
+    ); */
+  }
+
+  tick() {
+    // this.forceUpdate();
+
+  }
+
+  handleAbout() {
+    this.setState({tab: "about"});
+  }
+
+  handleEdit() {
+    this.setState({tab: "edit"});
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="button" value="About" onClick={this.handleAbout}/>
+        <input type="button" value="Edit/Run" onClick={this.handleEdit}/>
+        <div style={{display: this.state.tab === "about" ? 'block' : 'none' }}>
+          Them trees do be short :flustered:
+        </div>
+        <div style={{display: this.state.tab === "edit" ? 'block' : 'none' }}>
+          <InputForm graph={this.state.graph}/>
+          <DeleteButton graph={this.state.graph}/>
+          <AlgorithmButton algorithm={this.state.kruskals} label="Run Kruskals"/>
+          <AlgorithmButton algorithm={this.state.prims} label="Run Prims"/>
+          <AlgorithmSidebar object={this.state.graph}/>
+        </div>
+      </div>
+    );
+  }
+}
+
+function createMinspanSidebar(graph, kruskals, prims, componentID) {
+  let domContainer = document.querySelector(componentID);
+  ReactDOM.render(<MinspanSidebar graph={graph} kruskals={kruskals} prims={prims}/>, domContainer);
+}

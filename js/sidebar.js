@@ -347,3 +347,76 @@ function createCodeBlock(object, componentID) {
   var domContainer = document.querySelector(componentID);
   ReactDOM.render(React.createElement(CodeBlock, { object: object }), domContainer);
 }
+
+var MinspanSidebar = function (_React$Component5) {
+  _inherits(MinspanSidebar, _React$Component5);
+
+  function MinspanSidebar(props) {
+    _classCallCheck(this, MinspanSidebar);
+
+    var _this9 = _possibleConstructorReturn(this, (MinspanSidebar.__proto__ || Object.getPrototypeOf(MinspanSidebar)).call(this, props));
+
+    _this9.state = { visible: true, graph: props.graph, kruskals: props.kruskals, prims: props.prims, tab: "about" };
+    _this9.handleAbout = _this9.handleAbout.bind(_this9);
+    _this9.handleEdit = _this9.handleEdit.bind(_this9);
+    return _this9;
+  }
+
+  _createClass(MinspanSidebar, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      /*
+      this.timerID = setInterval(
+        () => this.tick(),
+        100
+      ); */
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      // this.forceUpdate();
+
+    }
+  }, {
+    key: "handleAbout",
+    value: function handleAbout() {
+      this.setState({ tab: "about" });
+    }
+  }, {
+    key: "handleEdit",
+    value: function handleEdit() {
+      this.setState({ tab: "edit" });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return React.createElement(
+        "div",
+        null,
+        React.createElement("input", { type: "button", value: "About", onClick: this.handleAbout }),
+        React.createElement("input", { type: "button", value: "Edit/Run", onClick: this.handleEdit }),
+        React.createElement(
+          "div",
+          { style: { display: this.state.tab === "about" ? 'block' : 'none' } },
+          "Them trees do be short :flustered:"
+        ),
+        React.createElement(
+          "div",
+          { style: { display: this.state.tab === "edit" ? 'block' : 'none' } },
+          React.createElement(InputForm, { graph: this.state.graph }),
+          React.createElement(DeleteButton, { graph: this.state.graph }),
+          React.createElement(AlgorithmButton, { algorithm: this.state.kruskals, label: "Run Kruskals" }),
+          React.createElement(AlgorithmButton, { algorithm: this.state.prims, label: "Run Prims" }),
+          React.createElement(AlgorithmSidebar, { object: this.state.graph })
+        )
+      );
+    }
+  }]);
+
+  return MinspanSidebar;
+}(React.Component);
+
+function createMinspanSidebar(graph, kruskals, prims, componentID) {
+  var domContainer = document.querySelector(componentID);
+  ReactDOM.render(React.createElement(MinspanSidebar, { graph: graph, kruskals: kruskals, prims: prims }), domContainer);
+}
