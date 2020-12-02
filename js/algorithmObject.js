@@ -94,7 +94,15 @@ class Graph extends AlgorithmObject {
     this.ctx.font = "30px Arial";
     this.ctx.textAlign = "center";
     this.ctx.textBaseline = 'middle';
-    this.ctx.fillText(node.label, node.x, node.y);
+    let label = node.label;
+    if (node.heuristic !== null) {
+      if (node.heuristic === Infinity) {
+        label += ' | ∞';
+      } else {
+        label += ' | ' + node.heuristic;
+      }
+    }
+    this.ctx.fillText(label, node.x, node.y);
   }
 
   drawEdge(edge) {
@@ -298,23 +306,22 @@ class Graph extends AlgorithmObject {
 
   changeLabel(component, label) {
     if (component instanceof Node) {
-      this.changeNodeLabel(component, label);
+      component.label = label;
+      this.redraw();
     } else if (component instanceof Edge) {
       let weight = parseInt(label);
       if (!isNaN(weight)) {
-        this.changeEdgeWeight(component, weight);
+        component.weight = label;
+        this.redraw();
       }
     }
   }
 
-  changeNodeLabel(node, label) {
-    node.setLabel(label);
-    this.redraw();
-  }
-
-  changeEdgeWeight(edge, weight) {
-    edge.setWeight(weight);
-    this.redraw();
+  changeHeuristic(component, heuristic) {
+    if (component instanceof Node) {
+      component.heuristic = heuristic;
+      this.redraw();
+    }
   }
 
   redraw() {
@@ -330,18 +337,11 @@ class Graph extends AlgorithmObject {
 
 class Node {
   color = "#000000";
+  heuristic = null;
 
   constructor(x, y, label) {
     this.x = x;
     this.y = y;
-    this.label = label;
-  }
-
-  setColor(color) {
-    this.color = color;
-  }
-
-  setLabel(label) {
     this.label = label;
   }
 
@@ -357,14 +357,6 @@ class Edge {
   constructor(node0, node1) {
     this.node0 = node0;
     this.node1 = node1;
-  }
-
-  setWeight(weight) {
-    this.weight = weight;
-  }
-
-  setColor(color) {
-    this.color = color;
   }
 
   toString() {

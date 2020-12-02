@@ -4,7 +4,7 @@ graph = createGraph(document.getElementById("myCanvas"));
 //createGraphInput(graph, '#input_container');
 //createDeleteButton(graph, '#delete_button_container');
 let kruskals = createKruskals(graph);
-let prims = createKruskals(graph); // NOT ACTUALLY PRIMS LOL
+let prims = createPrims(graph); // NOT ACTUALLY PRIMS LOL
 // console.log(kruskalsFunction);
 //createAlgorithmButton(kruskals, "Run Kruskals", "#start_kruskals_container");
 //createAlgorithmSidebar(graph, "#algorithm_sidebar_container");
