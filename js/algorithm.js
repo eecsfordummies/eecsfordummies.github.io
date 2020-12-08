@@ -132,12 +132,11 @@ class Kruskals extends Algorithm {
       yield 0;
     }
 
-    this.edges = Array.from(this.graph.edges);
     this.edges.sort(this.compare);
     this.highlightedLine = 5;
     yield 0;
 
-    for (this.edge of this.graph.edges) {
+    for (this.edge of this.edges) {
       this.highlightedLine = 6;
       yield 0;
 
@@ -189,14 +188,14 @@ class Kruskals extends Algorithm {
 
     // algorithm-specific reset
     this.algorithm = this.kruskals();
-    this.edges = new Array();
+    this.edges = Array.from(this.graph.edges);
     this.addedEdges = new Set();
     this.edge = null;
     this.union = null;
     this.node = null;
     this.n0 = null;
     this.n1 = null;
-    this.a = null;
+    // this.a = null;
   }
 
   displayCode() {
@@ -227,7 +226,7 @@ class Kruskals extends Algorithm {
 
     // General fields (always initialized)
     info += 'Nodes: ' + this.graph.nodes.toString() + '<br>';
-    info += 'All edges: ' + this.graph.edges.toString() + '<br>';
+    info += 'All edges: ' + this.edges.toString() + '<br>';
     info += 'Added edges: ' + this.addedEdges.toString() + '<br>';
 
     // Initialized while running
@@ -280,14 +279,11 @@ class Prims extends Algorithm {
   graph = null;
 
   // will change
-  edges = new Array();
-  addedEdges = new Set();
   union = null;
   node = null;
   edge = null;
-  n0 = null;
-  n1 = null;
-  // a = null;
+  nodes = new Array();
+  other = null;
 
   constructor(graph) {
     super();
@@ -296,32 +292,10 @@ class Prims extends Algorithm {
     this.algorithm = this.prims();
   }
 
-  * findHead(a) {
-    let frame = new Map();
-    frame.set('function', 'findHead');
-    frame.set('node', a);
-    this.stack.push(frame);
-    this.highlightedLine = 16;
-    yield 0;
-
-    while (this.union.get(frame.get('node')) !== frame.get('node')) {
-      this.highlightedLine = 17;
-      yield 0;
-
-      frame.set('node', this.union.get(frame.get('node')));
-      this.highlightedLine += 1;
-      yield 0;
-    }
-
-    this.ret = frame.get('node');
-    this.highlightedLine = 19;
-    yield 0;
-  }
-
   compare(a, b) {
-    if (a.weight > b.weight) {
+    if (a.heuristic > b.heuristic) {
       return 1;
-    } else if (b.weight > a.weight) {
+    } else if (b.heuristic > a.heuristic) {
       return -1;
     } else {
       return 0;
@@ -331,53 +305,38 @@ class Prims extends Algorithm {
   * prims() {
     this.graph.deselectSelected();
 
-    this.union = new Map();
-
-    for (this.node of this.graph.nodes) {
-      this.highlightedLine = 2;
-      yield 0;
-
-      this.union.set(this.node, this.node);
-      this.highlightedLine += 1;
-      yield 0;
+    for (let node of this.nodes) {
+      this.graph.changeHeuristic(node, Infinity);
     }
+    this.graph.changeHeuristic(this.nodes[0], 0);
 
-    this.edges = Array.from(this.graph.edges);
-    this.edges.sort(this.compare);
-    this.highlightedLine = 5;
-    yield 0;
+    // this.nodes = Array.from(this.graph.nodes);
+    //this.nodes.sort(this.compare);
 
-    for (this.edge of this.graph.edges) {
-      this.highlightedLine = 6;
-      yield 0;
+    while(this.nodes.length != 0) {
+      this.node = this.nodes.shift();
 
-      this.highlightedLine += 1;
-      yield 0;
-      yield* this.findHead(this.edge.node0);
-      this.n0 = this.ret;
-      this.stack.pop();
+      for (this.edge of this.graph.edges) {
+        if (this.edge.node0 === this.node) {
+          this.other = this.edge.node1;
+        } else if (this.edge.node1 === this.node) {
+          this.other = this.edge.node0;
+        } else {
+          continue;
+        }
 
-      this.highlightedLine = 8;
-      yield 0;
-      yield* this.findHead(this.edge.node1);
-      this.n1 = this.ret;
-      this.stack.pop();
-
-      this.highlightedLine = 10;
-      yield 0;
-      if (this.n0 !== this.n1) {
-        this.union.set(this.n0, this.n1);
-        this.highlightedLine += 1;
-        yield 0;
-
-        this.addedEdges.add(this.edge);
-        this.graph.changeColor(this.edge, "red");
-        this.highlightedLine += 1;
-        yield 1;
+        if (this.nodes.includes(this.other) && this.edge.weight < this.other.heuristic) {
+          this.graph.changeHeuristic(this.other, this.edge.weight);
+          for (let edge of this.graph.edges) {
+            if (edge.node0 === this.other || edge.node1 === this.other) {
+              this.graph.changeColor(edge, "black");
+            }
+          }
+          this.graph.changeColor(this.edge, "red");
+        }
       }
+      this.nodes.sort(this.compare);
     }
-
-    this.highlightedLine = 13;
     return;
   }
 
@@ -393,7 +352,7 @@ class Prims extends Algorithm {
       this.graph.changeColor(edge, "black");
     }
     for (let node of this.graph.nodes) {
-      this.graph.changeHeuristic(node, Infinity);
+      this.graph.changeHeuristic(node, null);
     }
 
     // general algorithm reset
@@ -403,14 +362,11 @@ class Prims extends Algorithm {
 
     // algorithm-specific reset
     this.algorithm = this.prims();
-    this.edges = new Array();
-    this.addedEdges = new Set();
     this.edge = null;
     this.union = null;
     this.node = null;
-    this.n0 = null;
-    this.n1 = null;
-    this.a = null;
+    this.nodes = Array.from(this.graph.nodes);
+    this.other = null;
   }
 
   exit() {
@@ -423,25 +379,19 @@ class Prims extends Algorithm {
 
 
   displayCode() {
-    let code = 'union = {}\n' +
-               'for node in nodes:\n' +
-               '\tunion[node] = node\n' +
+    let code = 'setDists(nodes, Math.inf)\n' +
+               'nodes[0].dist = 0\n' +
                '\n' +
-               'edges.sort(key = lambda edge: edge.weight) # sorts edges based on weight\n' +
-               'for edge in edges:\n' +
-               '\tnode0 = findHead(edge.node0)\n' +
-               '\tnode1 = findHead(edge.node1)\n' +
+               'while nodes:\n' +
+               '\tnode = nodes.pop(0)\n' +
+               '\tfor edge in [edge in edges if edge.contains(node)]:\n' +
+               '\t\tother = edge.node0 if node == edge.node1 else edge.node1\n' +
+               '\t\tif other in nodes and edge.weight < other.dist:\n' +
+               '\t\t\tother.dist = edge.weight\n' +
+               '\t\t\tother.parent = node\n' +
                '\t\n' +
-               '\tif node0 != node1:\n' +
-               '\t\tunion[node0] = node1\n' +
-               '\t\tadd(edge) # adds this edge to final graph\n' +
-               'exit(0)\n' +
-               '\n' +
-               '\n' +
-               'def findHead(node):\n' +
-               '\twhile(union[node] != node):\n' +
-               '\t\tnode = union[node]\n' +
-               '\treturn node\n';
+               '\tnodes.sort(key = lambda node: node.dist)\n' +
+               'exit(0)\n';
     return code;
   }
 
@@ -449,25 +399,19 @@ class Prims extends Algorithm {
     let info = '';
 
     // General fields (always initialized)
-    info += 'Nodes: ' + this.graph.nodes.toString() + '<br>';
-    info += 'All edges: ' + this.graph.edges.toString() + '<br>';
-    info += 'Added edges: ' + this.addedEdges.toString() + '<br>';
+    info += 'All nodes: ' + this.graph.nodes.toString() + '<br>';
+    info += 'Remaining nodes: ' + this.nodes.toString() + '<br>';
+    info += 'Edges: ' + this.graph.edges.toString() + '<br>';
 
     // Initialized while running
-    if (this.union !== null) {
-      info += 'union: ' + this.union.toString() + '<br>';
-    }
     if (this.node !== null) {
       info += 'node: ' + this.node.toString() + '<br>';
     }
     if (this.edge !== null) {
       info += 'edge: ' + this.edge.toString() + '<br>';
     }
-    if (this.n0 !== null) {
-      info += 'node0: ' + this.n0.toString() + '<br>';
-    }
-    if (this.n1 !== null) {
-      info += 'node1: ' + this.n1.toString() + '<br>';
+    if (this.other !== null) {
+      info += 'other: ' + this.other.toString() + '<br>';
     }
 
     // stack
