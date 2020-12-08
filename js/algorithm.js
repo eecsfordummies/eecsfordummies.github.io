@@ -308,35 +308,62 @@ class Prims extends Algorithm {
     for (let node of this.nodes) {
       this.graph.changeHeuristic(node, Infinity);
     }
+    this.highlightedLine = 1;
+    yield 0;
+
     this.graph.changeHeuristic(this.nodes[0], 0);
+    this.highlightedLine += 1;
+    yield 0;
 
     // this.nodes = Array.from(this.graph.nodes);
     //this.nodes.sort(this.compare);
 
     while(this.nodes.length != 0) {
+      this.highlightedLine = 4;
+      yield 0;
+
       this.node = this.nodes.shift();
+      this.highlightedLine += 1;
+      yield 0;
 
       for (this.edge of this.graph.edges) {
+
         if (this.edge.node0 === this.node) {
+          this.highlightedLine = 6;
+          yield 0;
           this.other = this.edge.node1;
         } else if (this.edge.node1 === this.node) {
+          this.highlightedLine = 6;
+          yield 0;
           this.other = this.edge.node0;
         } else {
           continue;
         }
+        this.highlightedLine += 1;
+        yield 0;
 
+        this.highlightedLine += 1;
+        yield 0;
         if (this.nodes.includes(this.other) && this.edge.weight < this.other.heuristic) {
           this.graph.changeHeuristic(this.other, this.edge.weight);
+          this.highlightedLine += 1;
+          yield 0;
+
           for (let edge of this.graph.edges) {
             if (edge.node0 === this.other || edge.node1 === this.other) {
               this.graph.changeColor(edge, "black");
             }
           }
           this.graph.changeColor(this.edge, "red");
+          this.highlightedLine += 1;
+          yield 1;
         }
       }
       this.nodes.sort(this.compare);
+      this.highlightedLine = 12;
+      yield 0;
     }
+    this.highlightedLine = 13;
     return;
   }
 
@@ -356,7 +383,7 @@ class Prims extends Algorithm {
     }
 
     // general algorithm reset
-    this.highlightedLine = 1;
+    this.highlightedLine = 99;
     this.stack = new Array();
     this.ret = null;
 
