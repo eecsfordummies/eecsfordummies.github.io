@@ -44,12 +44,12 @@ class InputForm extends React.Component {
     }
 
     return (
-      <form onSubmit={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}>
+      <form onSubmit={this.handleSubmit} class = "col-xs" style={{display: this.state.visible ? 'block' : 'none' }}>
         <label>
-          {label}
-          <input type="text" value={this.state.value} onChange={this.handleChange} style={{width: "50px" }} />
+          <div class ="row center-xs"><div class = "col-xs">{label}</div></div>
+          <div class ="row"><input type="text" class = "col-xs" value={this.state.value} onChange={this.handleChange}/></div>
         </label>
-        <input type="button" value="Submit" onClick={this.handleSubmit}/>
+        <div class ="row"><input class = "col-xs " type="button" value="Submit" onClick={this.handleSubmit}/></div>
       </form>
 
     );
@@ -84,7 +84,7 @@ class DeleteButton extends React.Component {
 
   render() {
     return (
-      <input type="button" value="Delete" onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
+      <input type="button" class = "col-xs " value="Delete" onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
     );
   }
 }
@@ -117,7 +117,7 @@ class AlgorithmButton extends React.Component {
 
   render() {
     return (
-      <input type="button" value={this.state.label} onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
+      <input type="button" class = "col-xs " value={this.state.label} onClick={this.handleSubmit} style={{display: this.state.visible ? 'block' : 'none' }}/>
     );
   }
 }
@@ -183,11 +183,15 @@ class AlgorithmSidebar extends React.Component {
 
     return (
       <div style={{display: this.state.visible ? 'block' : 'none' }}>
-        <input type="button" value='Run' onClick={this.handleRun}/>
-        <input type="button" value='Iterate' onClick={this.handleIterate}/>
-        <input type="button" value='Step' onClick={this.handleStep}/>
-        <input type="button" value='Restart' onClick={this.handleRestart}/>
-        <input type="button" value='Exit' onClick={this.handleExit}/>
+        <div class ="row">
+          <input type="button" class= "col-xs" value='Run' onClick={this.handleRun}/>
+          <input type="button" class= "col-lg" value='Iterate' onClick={this.handleIterate}/>
+          <input type="button" class= "col-xs" value='Step' onClick={this.handleStep}/>
+        </div>
+        <div class ="row">
+          <input type="button" class= "col-xs" value='Restart' onClick={this.handleRestart}/>
+          <input type="button" class= "col-xs" value='Exit' onClick={this.handleExit}/>
+        </div>
         <pre className="line-numbers" data-line={line}>
           <code className="language-python">
           {code}
@@ -313,17 +317,19 @@ class MinspanSidebar extends React.Component {
 
   render() {
     return (
-      <div>
-        <input type="button" value="About" onClick={this.handleAbout}/>
-        <input type="button" value="Edit/Run" onClick={this.handleEdit}/>
+      <div class = "box">
+        <div class = "row">
+          <input type="button" class = "col-xs" value="About" onClick={this.handleAbout}/>
+          <input type="button" class = "col-xs" value="Edit/Run" onClick={this.handleEdit}/>
+        </div>
         <div style={{display: this.state.tab === "about" ? 'block' : 'none' }}>
           Them trees do be short :flustered:
         </div>
         <div style={{display: this.state.tab === "edit" ? 'block' : 'none' }}>
-          <InputForm graph={this.state.graph}/>
-          <DeleteButton graph={this.state.graph}/>
-          <AlgorithmButton algorithm={this.state.kruskals} label="Run Kruskals"/>
-          <AlgorithmButton algorithm={this.state.prims} label="Run Prims"/>
+          <div class = "row"><InputForm graph={this.state.graph}/></div>
+          <div class = "row"><DeleteButton graph={this.state.graph}/></div>
+          <div class = "row"><AlgorithmButton algorithm={this.state.kruskals} label="Run Kruskals"/></div>
+          <div class = "row"><AlgorithmButton algorithm={this.state.prims} label="Run Prims"/></div>
           <AlgorithmSidebar object={this.state.graph}/>
         </div>
       </div>

@@ -1,6 +1,7 @@
 //import {Graph, Node, Edge} from './graph.js'
 
-graph = createGraph(document.getElementById("myCanvas"));
+const canvasWrapper = document.getElementById("canvasWrapper");
+graph = createGraph(document.getElementById("myCanvas"), canvasWrapper);
 //createGraphInput(graph, '#input_container');
 //createDeleteButton(graph, '#delete_button_container');
 let kruskals = createKruskals(graph);

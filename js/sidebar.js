@@ -64,14 +64,30 @@ var InputForm = function (_React$Component) {
 
       return React.createElement(
         "form",
-        { onSubmit: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } },
+        { onSubmit: this.handleSubmit, "class": "col-xs", style: { display: this.state.visible ? 'block' : 'none' } },
         React.createElement(
           "label",
           null,
-          label,
-          React.createElement("input", { type: "text", value: this.state.value, onChange: this.handleChange, style: { width: "50px" } })
+          React.createElement(
+            "div",
+            { "class": "row center-xs" },
+            React.createElement(
+              "div",
+              { "class": "col-xs" },
+              label
+            )
+          ),
+          React.createElement(
+            "div",
+            { "class": "row" },
+            React.createElement("input", { type: "text", "class": "col-xs", value: this.state.value, onChange: this.handleChange })
+          )
         ),
-        React.createElement("input", { type: "button", value: "Submit", onClick: this.handleSubmit })
+        React.createElement(
+          "div",
+          { "class": "row" },
+          React.createElement("input", { "class": "col-xs ", type: "button", value: "Submit", onClick: this.handleSubmit })
+        )
       );
     }
   }]);
@@ -118,7 +134,7 @@ var DeleteButton = function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      return React.createElement("input", { type: "button", value: "Delete", onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
+      return React.createElement("input", { type: "button", "class": "col-xs ", value: "Delete", onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
     }
   }]);
 
@@ -164,7 +180,7 @@ var AlgorithmButton = function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      return React.createElement("input", { type: "button", value: this.state.label, onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
+      return React.createElement("input", { type: "button", "class": "col-xs ", value: this.state.label, onClick: this.handleSubmit, style: { display: this.state.visible ? 'block' : 'none' } });
     }
   }]);
 
@@ -249,11 +265,19 @@ var AlgorithmSidebar = function (_React$Component4) {
       return React.createElement(
         "div",
         { style: { display: this.state.visible ? 'block' : 'none' } },
-        React.createElement("input", { type: "button", value: "Run", onClick: this.handleRun }),
-        React.createElement("input", { type: "button", value: "Iterate", onClick: this.handleIterate }),
-        React.createElement("input", { type: "button", value: "Step", onClick: this.handleStep }),
-        React.createElement("input", { type: "button", value: "Restart", onClick: this.handleRestart }),
-        React.createElement("input", { type: "button", value: "Exit", onClick: this.handleExit }),
+        React.createElement(
+          "div",
+          { "class": "row" },
+          React.createElement("input", { type: "button", "class": "col-xs", value: "Run", onClick: this.handleRun }),
+          React.createElement("input", { type: "button", "class": "col-lg", value: "Iterate", onClick: this.handleIterate }),
+          React.createElement("input", { type: "button", "class": "col-xs", value: "Step", onClick: this.handleStep })
+        ),
+        React.createElement(
+          "div",
+          { "class": "row" },
+          React.createElement("input", { type: "button", "class": "col-xs", value: "Restart", onClick: this.handleRestart }),
+          React.createElement("input", { type: "button", "class": "col-xs", value: "Exit", onClick: this.handleExit })
+        ),
         React.createElement(
           "pre",
           { className: "line-numbers", "data-line": line },
@@ -392,9 +416,13 @@ var MinspanSidebar = function (_React$Component5) {
     value: function render() {
       return React.createElement(
         "div",
-        null,
-        React.createElement("input", { type: "button", value: "About", onClick: this.handleAbout }),
-        React.createElement("input", { type: "button", value: "Edit/Run", onClick: this.handleEdit }),
+        { "class": "box" },
+        React.createElement(
+          "div",
+          { "class": "row" },
+          React.createElement("input", { type: "button", "class": "col-xs", value: "About", onClick: this.handleAbout }),
+          React.createElement("input", { type: "button", "class": "col-xs", value: "Edit/Run", onClick: this.handleEdit })
+        ),
         React.createElement(
           "div",
           { style: { display: this.state.tab === "about" ? 'block' : 'none' } },
@@ -403,10 +431,26 @@ var MinspanSidebar = function (_React$Component5) {
         React.createElement(
           "div",
           { style: { display: this.state.tab === "edit" ? 'block' : 'none' } },
-          React.createElement(InputForm, { graph: this.state.graph }),
-          React.createElement(DeleteButton, { graph: this.state.graph }),
-          React.createElement(AlgorithmButton, { algorithm: this.state.kruskals, label: "Run Kruskals" }),
-          React.createElement(AlgorithmButton, { algorithm: this.state.prims, label: "Run Prims" }),
+          React.createElement(
+            "div",
+            { "class": "row" },
+            React.createElement(InputForm, { graph: this.state.graph })
+          ),
+          React.createElement(
+            "div",
+            { "class": "row" },
+            React.createElement(DeleteButton, { graph: this.state.graph })
+          ),
+          React.createElement(
+            "div",
+            { "class": "row" },
+            React.createElement(AlgorithmButton, { algorithm: this.state.kruskals, label: "Run Kruskals" })
+          ),
+          React.createElement(
+            "div",
+            { "class": "row" },
+            React.createElement(AlgorithmButton, { algorithm: this.state.prims, label: "Run Prims" })
+          ),
           React.createElement(AlgorithmSidebar, { object: this.state.graph })
         )
       );

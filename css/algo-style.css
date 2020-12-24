@@ -1,4 +1,31 @@
+body {
+  margin:0px;
+}
+
+.canvas-wrapper {
+  max-width: 70%;
+  max-height: 100%;
+  overflow: scroll;
+  float: left;
+}
+
 .code-content {
   min-width: 0; /* added */
   overflow: auto; /* added */
+}
+
+.sidebar {
+  height: 100vh;
+  background-color: #D7F9FF;
+  margin-left: 70%;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.sidebar input[type="button"] {
+  height: 50px;
+  background-color: #C3E2FF;
+  border-width:0px;
+  margin:2px;
+  border-radius: 8px;
 }

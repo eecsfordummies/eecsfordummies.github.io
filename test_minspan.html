@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
     <script src="js/algorithm.js"></script>
     <script src="js/algorithmObject.js"></script>
     <script src="js/sidebar.js"></script>
@@ -18,9 +19,11 @@
    REACT STUFF
 ===============-->
 <div>
-  <canvas id="myCanvas" width="1000" height="2000" style="float:left;"></canvas>
-  <div id = "test">
-    <div id="input_container" >HELLO</div>
+  <div class="canvas-wrapper" id = "canvasWrapper">
+    <canvas id="myCanvas" width="3000" height="3000" class="canvas"></canvas>
+  </div>
+  <div id = "test" class = "sidebar">
+    <div id="input_container" class = "row">HELLO</div>
     <div id="delete_button_container" ></div>
     <div id="start_kruskals_container" ></div>
     <div id="start_prims_container" ></div>

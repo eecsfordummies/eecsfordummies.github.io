@@ -16,7 +16,7 @@ class AlgorithmObject {
        GRAPHS
 ==================*/
 
-function getScrollingPosition() {
+function getScrollingPosition(wrapper) {
   var position = [0, 0];
   if (typeof window.pageYOffset != 'undefined') {
     position = [
@@ -35,6 +35,8 @@ function getScrollingPosition() {
       document.body.scrollTop
     ];
   }
+  position[0] += wrapper.scrollLeft;
+  position[1] += wrapper.scrollTop;
   return position;
 }
 
@@ -75,13 +77,14 @@ class Graph extends AlgorithmObject {
   radius = 40;
   selected = null;
 
-  constructor(ctx, canvas) {
+  constructor(ctx, canvas, wrapper) {
     super();
 
     this.nodes = new Set();
     this.edges = new Set();
     this.ctx = ctx;
     this.canvas = canvas;
+    this.wrapper = wrapper;
     this.rect = canvas.getBoundingClientRect();
   }
 
@@ -260,7 +263,7 @@ class Graph extends AlgorithmObject {
 
     let x = event.clientX;
     let y = event.clientY;
-    let scrollPos = getScrollingPosition();
+    let scrollPos = getScrollingPosition(this.wrapper);
     x += scrollPos[0] - this.rect.left;
     y += scrollPos[1] - this.rect.top;
 
@@ -364,11 +367,11 @@ class Edge {
   }
 }
 
-function createGraph(canvas) {
+function createGraph(canvas, wrapper) {
   var c = canvas;
   var ctx = c.getContext("2d");
 
-  var graph = new Graph(ctx, c);
+  var graph = new Graph(ctx, c, wrapper);
 
   c.addEventListener("click", function(click) {graph.handleClick(click)});
 
